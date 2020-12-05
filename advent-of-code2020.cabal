@@ -25,6 +25,8 @@ source-repository head
 
 library
   exposed-modules:
+      AOC.ES1
+      AOC.Main
       Lib
       Lib.App
       Lib.App.Env
