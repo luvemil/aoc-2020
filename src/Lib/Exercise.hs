@@ -5,7 +5,10 @@ module Lib.Exercise where
 
 import Options.Generic
 
-data Exercise = ES1 FilePath | None
+data Exercise
+    = ES1 FilePath
+    | ES2 FilePath
+    | None
     deriving (Generic, Show)
 
 instance ParseRecord Exercise

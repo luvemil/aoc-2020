@@ -2,6 +2,8 @@
 
 module AOC.ES1 (main) where
 
+import AOC.Utils (parseList)
+
 getPairs :: [a] -> [(a, a)]
 getPairs [] = []
 getPairs [_] = []
@@ -13,13 +15,7 @@ filterBySum :: (Num a, Eq a) => a -> [(a, a)] -> [(a, a)]
 filterBySum tot = filter (\(x, y) -> x + y == tot)
 
 parseInput :: [String] -> IO [Integer]
-parseInput ss = do
-    let loop (x : xs) = do
-            y <- readIO x
-            ys <- loop xs
-            pure $ y : ys
-        loop [] = pure []
-    loop ss
+parseInput = parseList readIO
 
 getTriples :: [a] -> [(a, a, a)]
 getTriples [] = []

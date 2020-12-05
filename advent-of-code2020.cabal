@@ -26,7 +26,9 @@ source-repository head
 library
   exposed-modules:
       AOC.ES1
+      AOC.ES2
       AOC.Main
+      AOC.Utils
       Lib
       Lib.App
       Lib.App.Env
@@ -50,6 +52,7 @@ library
     , lens
     , mtl
     , optparse-generic
+    , regex-tdfa
     , text
     , time
     , tomland
@@ -73,6 +76,7 @@ executable advent-of-code2020-exe
     , lens
     , mtl
     , optparse-generic
+    , regex-tdfa
     , text
     , time
     , tomland
@@ -97,6 +101,7 @@ test-suite advent-of-code2020-test
     , lens
     , mtl
     , optparse-generic
+    , regex-tdfa
     , text
     , time
     , tomland
