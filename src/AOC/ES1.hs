@@ -1,4 +1,7 @@
 module AOC.ES1 (main) where
 
-main :: IO ()
-main = putStrLn "ES1"
+import Control.Monad.IO.Class
+import Lib.App
+
+main :: App ()
+main = liftIO $ putStrLn "ES1"
