@@ -27,6 +27,7 @@ library
   exposed-modules:
       AOC.ES1
       AOC.ES2
+      AOC.ES3
       AOC.Main
       AOC.Utils
       Lib
