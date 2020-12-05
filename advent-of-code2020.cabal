@@ -1,0 +1,100 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           advent-of-code2020
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/advent-of-code2020#readme>
+homepage:       https://github.com/githubuser/advent-of-code2020#readme
+bug-reports:    https://github.com/githubuser/advent-of-code2020/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2020 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/advent-of-code2020
+
+library
+  exposed-modules:
+      Lib
+      Lib.App
+      Lib.App.Env
+      Lib.App.Monad
+      Lib.Config
+      Lib.Server
+      Lib.StaticInfo
+  other-modules:
+      Paths_advent_of_code2020
+  hs-source-dirs:
+      src
+  default-extensions: BangPatterns ConstraintKinds DataKinds DeriveGeneric DerivingStrategies DerivingVia FlexibleContexts FlexibleInstances GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses OverloadedStrings OverloadedLabels RecordWildCards ScopedTypeVariables TypeApplications TypeFamilies TypeOperators
+  ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Widentities -Wredundant-constraints -fhide-source-paths -Wpartial-fields
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , generic-lens
+    , lens
+    , mtl
+    , optparse-generic
+    , text
+    , time
+    , tomland
+  default-language: Haskell2010
+
+executable advent-of-code2020-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_advent_of_code2020
+  hs-source-dirs:
+      app
+  default-extensions: BangPatterns ConstraintKinds DataKinds DeriveGeneric DerivingStrategies DerivingVia FlexibleContexts FlexibleInstances GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses OverloadedStrings OverloadedLabels RecordWildCards ScopedTypeVariables TypeApplications TypeFamilies TypeOperators
+  ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Widentities -Wredundant-constraints -fhide-source-paths -Wpartial-fields -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      advent-of-code2020
+    , aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , generic-lens
+    , lens
+    , mtl
+    , optparse-generic
+    , text
+    , time
+    , tomland
+  default-language: Haskell2010
+
+test-suite advent-of-code2020-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_advent_of_code2020
+  hs-source-dirs:
+      test
+  default-extensions: BangPatterns ConstraintKinds DataKinds DeriveGeneric DerivingStrategies DerivingVia FlexibleContexts FlexibleInstances GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses OverloadedStrings OverloadedLabels RecordWildCards ScopedTypeVariables TypeApplications TypeFamilies TypeOperators
+  ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Widentities -Wredundant-constraints -fhide-source-paths -Wpartial-fields -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      advent-of-code2020
+    , aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , generic-lens
+    , lens
+    , mtl
+    , optparse-generic
+    , text
+    , time
+    , tomland
+  default-language: Haskell2010
