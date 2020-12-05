@@ -6,7 +6,7 @@ import Lib.App
 import Lib.Exercise
 
 chooseAction :: Exercise -> App ()
-chooseAction ES1 = ES1.main
+chooseAction ES1{} = ES1.main
 chooseAction None = liftIO $ putStrLn "Nothing to do"
 
 runExercise :: AppEnv -> IO ()
