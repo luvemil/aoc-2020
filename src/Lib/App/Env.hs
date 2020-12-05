@@ -13,9 +13,11 @@ import Control.Monad.Reader (
     ask,
  )
 import Data.Kind (Type)
+import Lib.Exercise
 
 data Env (m :: Type -> Type) = Env
     { sInfo :: StaticInfo
+    , exercise :: Exercise
     }
 
 class Has field env where
@@ -23,6 +25,9 @@ class Has field env where
 
 instance Has StaticInfo (Env m) where
     obtain = sInfo
+
+instance Has Exercise (Env m) where
+    obtain = exercise
 
 grab :: forall field env m. (MonadReader env m, Has field env) => m field
 grab = fmap (obtain @field) ask

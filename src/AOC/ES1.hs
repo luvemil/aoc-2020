@@ -4,4 +4,5 @@ import Control.Monad.IO.Class
 import Lib.App
 
 main :: App ()
-main = liftIO $ putStrLn "ES1"
+main = do
+    liftIO . putStrLn $ "ES1"
