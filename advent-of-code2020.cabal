@@ -28,6 +28,7 @@ library
       AOC.ES1
       AOC.ES2
       AOC.ES3
+      AOC.ES4
       AOC.Main
       AOC.Utils
       Lib
