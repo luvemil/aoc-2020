@@ -1,8 +1,6 @@
 module AOC.ES1 (main) where
 
-import Control.Monad.IO.Class
-import Lib.App
-
-main :: App ()
-main = do
-    liftIO . putStrLn $ "ES1"
+main :: FilePath -> IO ()
+main input = do
+    parsed <- lines <$> readFile input
+    putStrLn $ "ES1: " ++ show parsed
