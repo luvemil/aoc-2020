@@ -41,6 +41,20 @@ computeSteps i s m = i' : computeSteps i'' s m
     i' = i `mod` m
     i'' = i + s `mod` m
 
+getEach :: Int -> [a] -> [a]
+getEach _ [] = []
+getEach i xs@(x : _) = x : getEach i (drop i xs)
+
+type Slope = (Int, Int)
+
+-- right -> down -> modulo -> worldMap -> result
+getTrees :: Slope -> Int -> [String] -> Int
+getTrees (rightStep, downStep) modulo worldMap =
+    let steps = computeSteps 0 rightStep modulo
+        walkedMap = getEach downStep worldMap
+        values = tail $ zipWith (!!) walkedMap steps
+     in length $ filter (== '#') values
+
 main :: FilePath -> IO ()
 main fp = do
     inputLines <- lines <$> readFile fp
@@ -52,4 +66,7 @@ main fp = do
                 values = tail $ zipWith (!!) parsed steps
                 res = filter (== '#') values
             putStrLn $ "Part1 result: " ++ show (length res) ++ " trees encountered"
+            let slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
+                res2 = map (\s -> getTrees s l parsed) slopes
+            putStrLn $ "Part2 result: " ++ show (product res2)
         _ -> putStrLn "Part1 Error: no length defined"
