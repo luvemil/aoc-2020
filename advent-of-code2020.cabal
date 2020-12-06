@@ -27,6 +27,7 @@ library
   exposed-modules:
       AOC.A19.ES1
       AOC.A19.ES2
+      AOC.A19.ES3
       AOC.ES1
       AOC.ES2
       AOC.ES3
