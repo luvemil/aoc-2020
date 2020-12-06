@@ -1,10 +1,11 @@
 module AOC.ES4 (main) where
 
 import AOC.Utils
+import qualified Data.Map as M
 import Text.Read (readMaybe)
 import Text.Regex.TDFA
 
-type Passport = [(String, String)]
+type Passport = M.Map String String
 
 psptRequiredKeys :: [String]
 psptRequiredKeys = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
@@ -85,23 +86,22 @@ psptValidationExpr =
 
 isValid1 :: Passport -> Bool
 isValid1 pspt =
-    let keys = map fst pspt
-        values = map snd pspt
+    let keys = map fst (M.toList pspt)
+        values = map snd (M.toList pspt)
      in all (`elem` keys) psptRequiredKeys && notElem "" values
 
 validateKey :: (String, String -> Bool) -> Passport -> Bool
 validateKey (key, validator) pspt =
-    let keyarr = filter ((== key) . fst) pspt
-        value = snd $ head keyarr
-     in validator value
+    let value = M.lookup key pspt
+     in maybe False validator value
 
 isValid2 :: Passport -> Bool
 isValid2 pspt =
-    let keys = map fst pspt
+    let keys = map fst (M.toList pspt)
      in all (`elem` keys) psptRequiredKeys && all (`validateKey` pspt) psptValidationExpr
 
 parsePassport :: [String] -> IO Passport
-parsePassport [] = pure []
+parsePassport [] = pure M.empty
 parsePassport (x : xs) = do
     let entries = splitOn ' ' x
         parseEntry s = do
@@ -111,7 +111,7 @@ parsePassport (x : xs) = do
                 _ -> fail $ "Cannot parse entry: " ++ s
     parsedLine <- parseList parseEntry entries
     rest <- parsePassport xs
-    pure $ parsedLine ++ rest
+    pure $ M.union (M.fromList parsedLine) rest
 
 main :: FilePath -> IO ()
 main fp = do
