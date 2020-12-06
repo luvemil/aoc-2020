@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       AOC.A19.ES1
+      AOC.A19.ES2
       AOC.ES1
       AOC.ES2
       AOC.ES3
@@ -50,6 +51,7 @@ library
   ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Widentities -Wredundant-constraints -fhide-source-paths -Wpartial-fields
   build-depends:
       aeson
+    , array
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -76,6 +78,7 @@ executable advent-of-code2020-exe
   build-depends:
       advent-of-code2020
     , aeson
+    , array
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -103,6 +106,7 @@ test-suite advent-of-code2020-test
   build-depends:
       advent-of-code2020
     , aeson
+    , array
     , base >=4.7 && <5
     , bytestring
     , containers

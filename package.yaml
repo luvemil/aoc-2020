@@ -34,6 +34,7 @@ dependencies:
   - regex-tdfa
   - megaparsec
   - transformers
+  - array
 
 ghc-options:
   - -Wall
