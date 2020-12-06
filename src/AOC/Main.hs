@@ -1,5 +1,6 @@
 module AOC.Main where
 
+import qualified AOC.A19.ES1 as A19E1
 import qualified AOC.ES1 as ES1
 import qualified AOC.ES2 as ES2
 import qualified AOC.ES3 as ES3
@@ -18,6 +19,7 @@ chooseAction (ES3 fp) = ES3.main fp
 chooseAction (ES4 fp) = ES4.main fp
 chooseAction (ES5 fp) = ES5.main fp
 chooseAction (ES6 fp) = ES6.main fp
+chooseAction (A19E1 fp) = A19E1.main fp
 chooseAction None = liftIO $ putStrLn "Nothing to do"
 
 runExercise :: AppEnv -> IO ()
