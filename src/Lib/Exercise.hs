@@ -11,6 +11,7 @@ data Exercise
     | ES3 FilePath
     | ES4 FilePath
     | ES5 FilePath
+    | ES6 FilePath
     | None
     deriving (Generic, Show)
 

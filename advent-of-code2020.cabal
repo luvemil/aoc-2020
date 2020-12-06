@@ -30,6 +30,7 @@ library
       AOC.ES3
       AOC.ES4
       AOC.ES5
+      AOC.ES6
       AOC.Main
       AOC.Utils
       Lib
