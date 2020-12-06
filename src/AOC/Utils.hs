@@ -7,7 +7,7 @@ uniq = foldl' add []
   where
     add as a = if a `elem` as then as else a : as
 
-parseList :: (a -> IO b) -> [a] -> IO [b]
+parseList :: MonadFail m => (a -> m b) -> [a] -> m [b]
 parseList parser input = do
     let loop (x : xs) = do
             y <- parser x
@@ -27,3 +27,7 @@ splitOn x xs = go xs []
         if x == y
             then reverse acc : go ys []
             else go ys (y : acc)
+
+embedMaybe :: MonadFail m => Maybe a -> m a
+embedMaybe Nothing = fail "Nothing"
+embedMaybe (Just x) = pure x

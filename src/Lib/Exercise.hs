@@ -10,6 +10,7 @@ data Exercise
     | ES2 FilePath
     | ES3 FilePath
     | ES4 FilePath
+    | ES5 FilePath
     | None
     deriving (Generic, Show)
 

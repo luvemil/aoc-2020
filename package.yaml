@@ -32,6 +32,8 @@ dependencies:
   - generic-lens
   - optparse-generic
   - regex-tdfa
+  - megaparsec
+  - transformers
 
 ghc-options:
   - -Wall
