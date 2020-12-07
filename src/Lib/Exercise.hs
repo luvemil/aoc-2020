@@ -15,6 +15,7 @@ data Exercise
     | A19E1 FilePath
     | A19E2 FilePath
     | A19E3 FilePath
+    | A19E4 FilePath
     | None
     deriving (Generic, Show)
 
