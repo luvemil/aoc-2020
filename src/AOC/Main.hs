@@ -11,6 +11,7 @@ import qualified AOC.ES4 as ES4
 import qualified AOC.ES5 as ES5
 import qualified AOC.ES6 as ES6
 import qualified AOC.ES7 as ES7
+import qualified AOC.ES8 as ES8
 import Control.Monad.IO.Class (MonadIO (liftIO))
 import Lib.App
 import Lib.Exercise
@@ -24,6 +25,7 @@ chooseAction (ES4 fp) = ES4.main fp
 chooseAction (ES5 fp) = ES5.main fp
 chooseAction (ES6 fp) = ES6.main fp
 chooseAction (ES7 fp) = ES7.main fp
+chooseAction (ES8 fp) = ES8.main fp
 chooseAction (A19E1 fp) = A19E1.main fp
 chooseAction (A19E2 fp) = A19E2.main fp
 chooseAction (A19E3 fp) = A19E3.main fp

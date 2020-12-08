@@ -13,6 +13,7 @@ data Exercise
     | ES5 FilePath
     | ES6 FilePath
     | ES7 FilePath
+    | ES8 FilePath
     | A19E1 FilePath
     | A19E2 FilePath
     | A19E3 FilePath
