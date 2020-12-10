@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module AOC.Utils where
 
 import Data.List (foldl')
@@ -46,3 +48,10 @@ findFixedPointIter isFixed f x =
      in if isFixed x x'
             then x'
             else findFixedPointIter isFixed f x'
+
+getPairs :: [a] -> [(a, a)]
+getPairs [] = []
+getPairs [_] = []
+getPairs (x : xs) = couple x xs ++ getPairs xs
+  where
+    couple z zs = map (z,) zs

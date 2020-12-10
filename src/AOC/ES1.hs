@@ -2,14 +2,7 @@
 
 module AOC.ES1 (main) where
 
-import AOC.Utils (parseList)
-
-getPairs :: [a] -> [(a, a)]
-getPairs [] = []
-getPairs [_] = []
-getPairs (x : xs) = couple x xs ++ getPairs xs
-  where
-    couple z zs = map (z,) zs
+import AOC.Utils (getPairs, parseList)
 
 filterBySum :: (Num a, Eq a) => a -> [(a, a)] -> [(a, a)]
 filterBySum tot = filter (\(x, y) -> x + y == tot)
