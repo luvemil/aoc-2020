@@ -55,3 +55,8 @@ getPairs [_] = []
 getPairs (x : xs) = couple x xs ++ getPairs xs
   where
     couple z zs = map (z,) zs
+
+rollingWindows :: Int -> [a] -> [[a]]
+rollingWindows t xs
+    | length xs < t = []
+    | otherwise = take t xs : rollingWindows t (tail xs)
