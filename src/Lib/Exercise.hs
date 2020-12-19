@@ -16,6 +16,7 @@ data Exercise
     | ES8 FilePath
     | ES9 FilePath
     | ES10 FilePath
+    | ES11 FilePath Int
     | A19E1 FilePath
     | A19E2 FilePath
     | A19E3 FilePath
