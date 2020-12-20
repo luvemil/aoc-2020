@@ -133,17 +133,28 @@ printSeatsLines (x : xs) = do
 printSeatsMap :: SeatsMap -> IO ()
 printSeatsMap = printSeatsLines . splitLines
 
+updateMap :: SeatsMap -> SeatsMap
+updateMap oldMap =
+    let ixes = indices oldMap
+        f ix =
+            let newState = computeNewState ix oldMap
+             in newState `seq` (ix, newState)
+        newList =
+            ixes
+                & filter ((/= Done) . snd . (oldMap !)) -- only check those that changed
+                & map f
+                & filter ((/= Done) . snd . snd)
+     in -- newMap :: SeatsMap = newList `seq` array (bounds oldMap) newList
+        oldMap // newList
+
 main :: FilePath -> Int -> IO ()
 main fp myLim = do
     inputLines <- lines <$> readFile fp
     parsed <- parseList (embedMaybe . parseMaybe seatLineParser) inputLines
-    let seatsMap = buildMap parsed
+    let myElems = length . filter (== Full) . map fst . elems
+        seatsMap = buildMap parsed
         state1 = evalState run1 seatsMap
-        res1 =
-            elems state1
-                & map fst
-                & filter (== Full)
-                & length
+        res1 = myElems state1
     -- putStrLn $ "Part 1 result: " ++ show res1
     let (s, state2) = runState (runLimit myLim) seatsMap
         res2 =
@@ -151,7 +162,11 @@ main fp myLim = do
                 & map fst
                 & filter (== Full)
                 & length
-    putStrLn $ "After " ++ show myLim ++ " state is " ++ show s ++ " res is " ++ show res2
+    -- putStrLn $ "After " ++ show myLim ++ " state is " ++ show s ++ " res is " ++ show res2
     -- let state' = execState (step >> step >> step >> step >> step >> step) seatsMap
-    putStrLn "-----\n-----\n-----\nFirst lines:"
-    printSeatsLines . take 3 . splitLines $ state2
+    -- putStrLn "-----\n-----\n-----\nFirst lines:"
+    -- printSeatsLines . take 3 . splitLines $ state2
+    let state3 = findFixedPointIter (==) updateMap seatsMap
+        res3 = myElems state3
+
+    putStrLn $ "Part1 result: " ++ show res3
