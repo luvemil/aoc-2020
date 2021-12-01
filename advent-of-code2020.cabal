@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 
@@ -29,6 +29,7 @@ library
       AOC.A19.ES2
       AOC.A19.ES3
       AOC.A19.ES4
+      AOC.A20.ES1
       AOC.ES1
       AOC.ES10
       AOC.ES11
@@ -54,7 +55,27 @@ library
       Paths_advent_of_code2020
   hs-source-dirs:
       src
-  default-extensions: BangPatterns ConstraintKinds DataKinds DeriveGeneric DerivingStrategies DerivingVia FlexibleContexts FlexibleInstances GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses OverloadedStrings OverloadedLabels RecordWildCards ScopedTypeVariables TypeApplications TypeFamilies TypeOperators
+  default-extensions:
+      BangPatterns
+      ConstraintKinds
+      DataKinds
+      DeriveGeneric
+      DerivingStrategies
+      DerivingVia
+      FlexibleContexts
+      FlexibleInstances
+      GeneralizedNewtypeDeriving
+      InstanceSigs
+      KindSignatures
+      LambdaCase
+      MultiParamTypeClasses
+      OverloadedStrings
+      OverloadedLabels
+      RecordWildCards
+      ScopedTypeVariables
+      TypeApplications
+      TypeFamilies
+      TypeOperators
   ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Widentities -Wredundant-constraints -fhide-source-paths -Wpartial-fields
   build-depends:
       aeson
@@ -80,7 +101,27 @@ executable advent-of-code2020-exe
       Paths_advent_of_code2020
   hs-source-dirs:
       app
-  default-extensions: BangPatterns ConstraintKinds DataKinds DeriveGeneric DerivingStrategies DerivingVia FlexibleContexts FlexibleInstances GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses OverloadedStrings OverloadedLabels RecordWildCards ScopedTypeVariables TypeApplications TypeFamilies TypeOperators
+  default-extensions:
+      BangPatterns
+      ConstraintKinds
+      DataKinds
+      DeriveGeneric
+      DerivingStrategies
+      DerivingVia
+      FlexibleContexts
+      FlexibleInstances
+      GeneralizedNewtypeDeriving
+      InstanceSigs
+      KindSignatures
+      LambdaCase
+      MultiParamTypeClasses
+      OverloadedStrings
+      OverloadedLabels
+      RecordWildCards
+      ScopedTypeVariables
+      TypeApplications
+      TypeFamilies
+      TypeOperators
   ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Widentities -Wredundant-constraints -fhide-source-paths -Wpartial-fields -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       advent-of-code2020
@@ -108,7 +149,27 @@ test-suite advent-of-code2020-test
       Paths_advent_of_code2020
   hs-source-dirs:
       test
-  default-extensions: BangPatterns ConstraintKinds DataKinds DeriveGeneric DerivingStrategies DerivingVia FlexibleContexts FlexibleInstances GeneralizedNewtypeDeriving InstanceSigs KindSignatures LambdaCase MultiParamTypeClasses OverloadedStrings OverloadedLabels RecordWildCards ScopedTypeVariables TypeApplications TypeFamilies TypeOperators
+  default-extensions:
+      BangPatterns
+      ConstraintKinds
+      DataKinds
+      DeriveGeneric
+      DerivingStrategies
+      DerivingVia
+      FlexibleContexts
+      FlexibleInstances
+      GeneralizedNewtypeDeriving
+      InstanceSigs
+      KindSignatures
+      LambdaCase
+      MultiParamTypeClasses
+      OverloadedStrings
+      OverloadedLabels
+      RecordWildCards
+      ScopedTypeVariables
+      TypeApplications
+      TypeFamilies
+      TypeOperators
   ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Widentities -Wredundant-constraints -fhide-source-paths -Wpartial-fields -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       advent-of-code2020
