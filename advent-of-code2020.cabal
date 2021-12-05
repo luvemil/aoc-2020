@@ -32,6 +32,7 @@ library
       AOC.A21.ES1
       AOC.A21.ES2
       AOC.A21.ES3
+      AOC.A21.ES4
       AOC.ES1
       AOC.ES10
       AOC.ES11
@@ -66,6 +67,7 @@ library
       DerivingVia
       FlexibleContexts
       FlexibleInstances
+      GADTs
       GeneralizedNewtypeDeriving
       InstanceSigs
       KindSignatures
@@ -73,6 +75,8 @@ library
       MultiParamTypeClasses
       OverloadedStrings
       OverloadedLabels
+      PolyKinds
+      RankNTypes
       RecordWildCards
       ScopedTypeVariables
       TypeApplications
@@ -112,6 +116,7 @@ executable advent-of-code2020-exe
       DerivingVia
       FlexibleContexts
       FlexibleInstances
+      GADTs
       GeneralizedNewtypeDeriving
       InstanceSigs
       KindSignatures
@@ -119,6 +124,8 @@ executable advent-of-code2020-exe
       MultiParamTypeClasses
       OverloadedStrings
       OverloadedLabels
+      PolyKinds
+      RankNTypes
       RecordWildCards
       ScopedTypeVariables
       TypeApplications
@@ -160,6 +167,7 @@ test-suite advent-of-code2020-test
       DerivingVia
       FlexibleContexts
       FlexibleInstances
+      GADTs
       GeneralizedNewtypeDeriving
       InstanceSigs
       KindSignatures
@@ -167,6 +175,8 @@ test-suite advent-of-code2020-test
       MultiParamTypeClasses
       OverloadedStrings
       OverloadedLabels
+      PolyKinds
+      RankNTypes
       RecordWildCards
       ScopedTypeVariables
       TypeApplications

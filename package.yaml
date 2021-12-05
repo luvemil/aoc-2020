@@ -55,6 +55,7 @@ default-extensions:
   - DerivingVia
   - FlexibleContexts
   - FlexibleInstances
+  - GADTs
   - GeneralizedNewtypeDeriving
   - InstanceSigs
   - KindSignatures
@@ -62,6 +63,8 @@ default-extensions:
   - MultiParamTypeClasses
   - OverloadedStrings
   - OverloadedLabels
+  - PolyKinds
+  - RankNTypes
   - RecordWildCards
   - ScopedTypeVariables
   - TypeApplications

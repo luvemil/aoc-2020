@@ -2,6 +2,7 @@
 
 module AOC.Utils where
 
+import Control.Lens
 import Data.List (foldl')
 
 uniq :: Eq a => [a] -> [a]
@@ -60,3 +61,14 @@ rollingWindows :: Int -> [a] -> [[a]]
 rollingWindows t xs
     | length xs < t = []
     | otherwise = take t xs : rollingWindows t (tail xs)
+
+splitExact :: Traversable t => t a -> Int -> [[a]]
+splitExact xs n
+    | n < 0 = error "splitExact x n, x should be >= 0"
+    | n == 0 = []
+    | otherwise =
+        let myHead = xs ^.. taking 5 traversed
+            myTail = xs ^.. dropping 5 traversed
+         in case length myHead of
+                5 -> myHead : splitExact myTail n
+                _ -> []
