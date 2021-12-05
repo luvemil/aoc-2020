@@ -21,8 +21,6 @@ data Op
     | NOP Int
     deriving (Show, Eq)
 
-type Parser = Parsec Void String
-
 data Status = Running | Terminated | Loop
     deriving (Show, Eq)
 

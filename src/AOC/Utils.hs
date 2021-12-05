@@ -4,6 +4,12 @@ module AOC.Utils where
 
 import Control.Lens
 import Data.List (foldl')
+import Data.Void (Void)
+import Text.Megaparsec
+import Text.Megaparsec.Char (digitChar)
+import Text.Read (readMaybe)
+
+type Parser = Parsec Void String
 
 uniq :: Eq a => [a] -> [a]
 uniq = foldl' add []
@@ -35,6 +41,17 @@ splitOn x xs = go xs []
 embedMaybe :: MonadFail m => Maybe a -> m a
 embedMaybe Nothing = fail "Nothing"
 embedMaybe (Just x) = pure x
+
+intParser :: Parser Int
+intParser = do
+    val <- readMaybe <$> many digitChar
+    embedMaybe val
+
+arrParser :: Parser a -> Parser b -> Parser [b]
+arrParser sep p = do
+    initEls <- many . try $ p <* sep
+    lastEl <- p
+    pure $ initEls ++ [lastEl]
 
 -- findFixedPointIter :: ((a, b) -> (a, b) -> Bool) -> (a -> b -> (a, b)) -> a -> b -> (a, b)
 -- findFixedPointIter isFixed f x y =

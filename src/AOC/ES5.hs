@@ -6,8 +6,6 @@ import Data.Void (Void)
 import Text.Megaparsec
 import Text.Megaparsec.Char (char)
 
-type Parser = Parsec Void String
-
 data BinaryDigit = One | Zero
     deriving (Show, Eq)
 

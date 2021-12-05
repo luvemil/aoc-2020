@@ -12,8 +12,6 @@ data Direction = Up | Down | Forward
 data Step = Step Direction Int
     deriving (Show, Eq)
 
-type Parser = Parsec Void String
-
 directionParser :: Parser Direction
 directionParser = do
     choice

@@ -7,8 +7,6 @@ import Text.Megaparsec
 import Text.Megaparsec.Char (char)
 import Toml.Parser.Core (digitChar)
 
-type Parser = Parsec Void String
-
 data Direction = DU | DD | DR | DL
     deriving (Show, Eq)
 

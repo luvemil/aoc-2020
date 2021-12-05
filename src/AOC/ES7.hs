@@ -15,8 +15,6 @@ data BagRule = BagRule
     }
     deriving (Eq, Show)
 
-type Parser = Parsec Void String
-
 -- | TODO: improve this implementation
 parseColor :: Parser BagID
 parseColor = do

@@ -2,7 +2,7 @@
 
 module AOC.A21.ES4 where
 
-import AOC.Utils (embedMaybe, splitExact)
+import AOC.Utils (arrParser, embedMaybe, intParser, splitExact)
 import Control.Lens
 import Control.Monad (forM_, replicateM)
 import qualified Data.Foldable as F
@@ -100,17 +100,6 @@ type Parser = Parsec Void String
 
 newtype Extraction = Extraction [Int]
     deriving (Show)
-
-intParser :: Parser Int
-intParser = do
-    val <- readMaybe <$> many digitChar
-    embedMaybe val
-
-arrParser :: Parser a -> Parser b -> Parser [b]
-arrParser sep p = do
-    initEls <- many . try $ p <* sep
-    lastEl <- p
-    pure $ initEls ++ [lastEl]
 
 extractionParser :: Parser Extraction
 extractionParser = Extraction <$> arrParser (char ',') intParser

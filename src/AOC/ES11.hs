@@ -13,8 +13,6 @@ import Text.Megaparsec.Char
 
 type Coords = (Int, Int)
 
-type Parser = Parsec Void String
-
 data SeatState = Empty | Full | Floor
     deriving (Eq, Show)
 
