@@ -3,7 +3,9 @@
 module AOC.Utils where
 
 import Control.Lens
+import qualified Data.Foldable as F
 import Data.List (foldl')
+import qualified Data.Map as M
 import Data.Void (Void)
 import Text.Megaparsec
 import Text.Megaparsec.Char (digitChar)
@@ -89,3 +91,9 @@ splitExact xs n
          in case length myHead of
                 5 -> myHead : splitExact myTail n
                 _ -> []
+
+countOccurrencies :: (Ord a, Foldable t, Integral n) => t a -> M.Map a n
+countOccurrencies = F.foldl' (flip (M.alter func)) M.empty
+  where
+    func Nothing = Just 1
+    func (Just x) = Just $ x + 1

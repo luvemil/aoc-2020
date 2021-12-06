@@ -1,6 +1,6 @@
 module AOC.A21.ES6 where
 
-import AOC.Utils (Parser, arrParser, embedMaybe, intParser)
+import AOC.Utils (Parser, arrParser, countOccurrencies, embedMaybe, intParser)
 import Control.Lens.Operators
 import Data.List (group)
 import qualified Data.Map as M
@@ -34,10 +34,7 @@ runStep f n s
 type SecondLanternfishState = M.Map Int Integer
 
 initSecondState :: [Int] -> SecondLanternfishState
-initSecondState xs =
-    let grouped = group xs
-        mapped = [(head x, fromIntegral $ length x) | x <- grouped]
-     in M.fromList mapped
+initSecondState = countOccurrencies
 
 step' :: SecondLanternfishState -> SecondLanternfishState
 step' xs =
@@ -59,5 +56,6 @@ main fp days = do
     input <- readFile fp
     initialState <- embedMaybe . parseMaybe stateParser $ input
     let initialState' = initSecondState initialState
-        res1 = runStep step days initialState
+        res1 = runStep step' days initialState'
+    print initialState'
     putStrLn $ "Res1: " ++ show (length res1)
