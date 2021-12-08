@@ -1,6 +1,7 @@
 module AOC.A21.ES6 where
 
 import AOC.Utils (Parser, arrParser, countOccurrencies, embedMaybe, intParser)
+import Control.Lens
 import Control.Lens.Operators
 import Data.List (group)
 import qualified Data.Map as M
@@ -57,5 +58,7 @@ main fp days = do
     initialState <- embedMaybe . parseMaybe stateParser $ input
     let initialState' = initSecondState initialState
         res1 = runStep step' days initialState'
+        vals = res1 ^.. traversed
+        res2 = sum vals
     print initialState'
-    putStrLn $ "Res1: " ++ show (length res1)
+    putStrLn $ "Res1: " ++ show res2

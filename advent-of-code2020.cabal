@@ -35,6 +35,7 @@ library
       AOC.A21.ES4
       AOC.A21.ES5
       AOC.A21.ES6
+      AOC.A21.ES7
       AOC.ES1
       AOC.ES10
       AOC.ES11
@@ -48,6 +49,7 @@ library
       AOC.ES9
       AOC.Main
       AOC.Utils
+      AOC.Utils.Math
       Lib
       Lib.App
       Lib.App.Env
