@@ -35,6 +35,7 @@ dependencies:
   - megaparsec
   - transformers
   - array
+  - unordered-containers
 
 ghc-options:
   - -Wall

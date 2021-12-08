@@ -36,6 +36,7 @@ library
       AOC.A21.ES5
       AOC.A21.ES6
       AOC.A21.ES7
+      AOC.A21.ES8
       AOC.ES1
       AOC.ES10
       AOC.ES11
@@ -103,6 +104,7 @@ library
     , time
     , tomland
     , transformers
+    , unordered-containers
   default-language: Haskell2010
 
 executable advent-of-code2020-exe
@@ -153,6 +155,7 @@ executable advent-of-code2020-exe
     , time
     , tomland
     , transformers
+    , unordered-containers
   default-language: Haskell2010
 
 test-suite advent-of-code2020-test
@@ -204,4 +207,5 @@ test-suite advent-of-code2020-test
     , time
     , tomland
     , transformers
+    , unordered-containers
   default-language: Haskell2010
