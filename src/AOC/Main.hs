@@ -12,6 +12,7 @@ import qualified AOC.A21.ES5 as A21E5
 import qualified AOC.A21.ES6 as A21E6
 import qualified AOC.A21.ES7 as A21E7
 import qualified AOC.A21.ES8 as A21E8
+import qualified AOC.A21.ES9 as A21E9
 import qualified AOC.ES1 as ES1
 import qualified AOC.ES10 as ES10
 import qualified AOC.ES11 as ES11
@@ -52,6 +53,7 @@ chooseAction (A21E5 fp) = A21E5.main fp
 chooseAction (A21E6 fp x) = A21E6.main fp x
 chooseAction (A21E7 fp) = A21E7.main fp
 chooseAction (A21E8 fp) = A21E8.main fp
+chooseAction (A21E9 fp) = A21E9.main fp
 chooseAction None = liftIO $ putStrLn "Nothing to do"
 
 runExercise :: AppEnv -> IO ()
