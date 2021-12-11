@@ -32,16 +32,24 @@ getRow x (Grid w h xs)
 _rows :: Fold (Grid a) [a]
 _rows = folding $ \x@(Grid _ h _) -> map (`getRow` x) [0 .. (h - 1)]
 
+isIn :: (Int, Int) -> Grid a -> Bool
+(x, y) `isIn` (Grid w h _) = x >= 0 && y >= 0 && x < w && y < h
+
+getNeighborPos :: Int -> Int -> Grid a -> (Maybe (Int, Int), Maybe (Int, Int), Maybe (Int, Int), Maybe (Int, Int))
+getNeighborPos x y grid =
+    let validate pos =
+            if pos `isIn` grid
+                then Just pos
+                else Nothing
+     in ((x, y + 1), (x + 1, y), (x, y -1), (x - 1, y)) & each %~ validate
+
 -- | Output: (Bottom, Right, Top, Left)
 getNeighbors :: Int -> Int -> Grid a -> (Maybe a, Maybe a, Maybe a, Maybe a)
-getNeighbors x y grid@(Grid w h _)
-    | x < 0 || y < 0 || x >= w || y >= h = (Nothing, Nothing, Nothing, Nothing)
-    | otherwise =
-        ( getPosition x (y + 1) grid
-        , getPosition (x + 1) y grid
-        , getPosition x (y - 1) grid
-        , getPosition (x - 1) y grid
-        )
+getNeighbors x y grid
+    | not ((x, y) `isIn` grid) = (Nothing, Nothing, Nothing, Nothing)
+    | otherwise = getNeighborPos x y grid & each %~ (func =<<)
+  where
+    func (x', y') = getPosition x' y' grid
 
 createGrid :: MonadFail m => [[a]] -> m (Grid a)
 createGrid xss = do
@@ -50,7 +58,6 @@ createGrid xss = do
         [l] -> let h = length xss in pure $ Grid l h (concat xss)
         _ -> fail "Different lengths"
 
--- TODO: define the following
 showGrid :: Show a => Grid a -> String
 showGrid grid =
     let gridRows = grid ^.. _rows . to showRow
