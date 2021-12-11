@@ -25,8 +25,6 @@ part1 grid = do
         -- TODO: use optics instead of mapMaybe
         -- lowPoints = grid ^.. filteredBy (_positions . filtered (\(x, y) -> isLowPoint x y grid)) . _points
         lowPoints = mapMaybe (\(x, y) -> getPosition x y grid) lowPos
-    putStrLn $ "Low pos: " ++ show lowPos
-    putStrLn $ "Low points: " ++ show lowPoints
     pure $ sumOf (traversed . to (+ 1)) lowPoints
 
 main :: FilePath -> IO ()

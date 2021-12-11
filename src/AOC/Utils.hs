@@ -40,6 +40,11 @@ splitOn x xs = go xs []
             then reverse acc : go ys []
             else go ys (y : acc)
 
+joinWith :: a -> [[a]] -> [a]
+joinWith _ [] = []
+joinWith _ [xs] = xs
+joinWith sep (xs : xss) = xs ++ [sep] ++ joinWith sep xss
+
 embedMaybe :: MonadFail m => Maybe a -> m a
 embedMaybe Nothing = fail "Nothing"
 embedMaybe (Just x) = pure x
