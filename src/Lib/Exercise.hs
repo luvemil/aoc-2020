@@ -30,6 +30,7 @@ data Exercise
     | A21E7 FilePath
     | A21E8 FilePath
     | A21E9 FilePath
+    | A21E10 FilePath
     | None
     deriving (Generic, Show)
 
