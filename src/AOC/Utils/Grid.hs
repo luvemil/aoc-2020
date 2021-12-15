@@ -2,6 +2,8 @@ module AOC.Utils.Grid where
 
 import AOC.Utils (joinWith, uniq, (!?))
 import Control.Lens
+import Data.Bifunctor (first)
+import Data.Maybe (catMaybes, fromJust)
 
 data Grid a = Grid Int Int [a]
     -- { width :: Int
@@ -13,11 +15,30 @@ data Grid a = Grid Int Int [a]
 instance Functor Grid where
     fmap f (Grid w h xs) = Grid w h (map f xs)
 
+instance Foldable Grid where
+    foldMap f (Grid _ _ xs) = foldMap f xs
+
+instance Traversable Grid where
+    traverse f (Grid w h xs) = Grid w h <$> traverse f xs
+
 _positions :: Fold (Grid a) (Int, Int)
 _positions = folding $ \(Grid w h _) -> [(x, y) | x <- [0 .. (w - 1)], y <- [0 .. (h - 1)]]
 
+_withIndex :: Fold (Grid a) (a, (Int, Int))
+_withIndex =
+    let enriched g =
+            g
+                ^.. _positions
+                    . to (\(x', y') -> (getPosition x' y' g, (x', y')))
+                    . to flipMaybe
+                    . traversed
+        flipMaybe (Nothing, _) = Nothing
+        flipMaybe (Just a, p) = Just (a, p)
+     in folding $ \grid -> enriched grid
+
 _points :: Traversal (Grid a) (Grid b) a b
-_points handler (Grid w h xs) = Grid w h <$> traverse handler xs
+-- _points handler (Grid w h xs) = Grid w h <$> traverse handler xs
+_points = traverse
 
 getPosition :: Int -> Int -> Grid a -> Maybe a
 getPosition x y (Grid w h xs)
@@ -51,6 +72,27 @@ getNeighbors x y grid
   where
     func (x', y') = getPosition x' y' grid
 
+getSquareNeighborPos :: Int -> Int -> Grid a -> [(Int, Int)]
+getSquareNeighborPos x y grid =
+    let allPos = [(x + epsilon, y + delta) | epsilon <- [-1, 0, 1], delta <- [-1, 0, 1], epsilon /= 0 || delta /= 0]
+     in allPos & filter (`isIn` grid)
+
+getSquareNeighbors :: Int -> Int -> Grid a -> [a]
+getSquareNeighbors x y grid
+    | not ((x, y) `isIn` grid) = []
+    | otherwise = catMaybes $ getSquareNeighborPos x y grid & traversed %~ func
+  where
+    func (x', y') = getPosition x' y' grid
+
+_sqNbhd :: forall a. (Int, Int) -> Traversal' (Grid a) a
+_sqNbhd (x, y) handler grid@(Grid w h as) = Grid w h <$> itraverse h'' as
+  where
+    nbhd = getSquareNeighborPos x y grid
+    h'' i a =
+        if (i `mod` w, i `div` w) `elem` nbhd
+            then handler a
+            else pure a
+
 createGrid :: MonadFail m => [[a]] -> m (Grid a)
 createGrid xss = do
     let ls = uniq $ map length xss
@@ -64,3 +106,17 @@ showGrid grid =
         showRow [] = ""
         showRow (x : xs) = show x ++ showRow xs
      in joinWith '\n' gridRows
+
+-- getIndexedGrid :: forall a m. MonadFail m => Grid a -> m (Grid (a, (Int, Int)))
+-- getIndexedGrid grid@(Grid w h _) = createGrid ixedVals
+--   where
+--     ixedVals :: [[(a, (Int, Int))]] =
+--         [ map () | (row, i) <- zip (grid ^.. _rows) [0 ..]]
+
+type instance Index (Grid a) = (Int, Int)
+type instance IxValue (Grid a) = a
+
+instance Ixed (Grid a) where
+    ix :: (Int, Int) -> Traversal' (Grid a) a
+    ix (x, y) handler (Grid w h xs) =
+        Grid w h <$> traverseOf (ix (y * w + x)) handler xs
