@@ -73,18 +73,22 @@ increasePath2 path maxSize
             then pure [path]
             else do
                 let candidates = startingWith lastNode available
-                    smallDone' = path ^.. traversed . _pair . each . filteredBy _Small
-                    smallDoneUnique = uniq smallDone'
-                    smallDone =
-                        if length smallDone' == length smallDoneUnique
-                            then smallDone' ^.. traversed . filtered (== startNode)
+                    smallDone' = path ^.. traversed . _pair . _2 . filteredBy _Small
+                    smallDone'' =
+                        if not (null path)
+                            then startNode : smallDone'
                             else smallDone'
+                    smallDoneUnique = uniq smallDone''
+                    smallDone =
+                        if length smallDone'' == length smallDoneUnique
+                            then smallDone'' ^.. traversed . filtered (== startNode)
+                            else smallDone''
                     allowed = candidates ^.. traversed . filteredBy (_pair . _2 . filtered (`notElem` smallDone))
                     newPaths = [path ++ [x] | x <- allowed]
-                liftIO . putStrLn $ "smallDone': " ++ show smallDone'
-                liftIO . putStrLn $ "smallDone: " ++ show smallDone
-                liftIO . putStrLn $ "allowed: " ++ show allowed
-                liftIO . putStrLn $ "\n"
+                -- liftIO . putStrLn $ "smallDone': " ++ show smallDone'
+                -- liftIO . putStrLn $ "smallDone: " ++ show smallDone
+                -- liftIO . putStrLn $ "allowed: " ++ show allowed
+                -- liftIO . putStrLn $ "\n"
                 inc <- forM newPaths $ \p -> increasePath2 p maxSize
                 pure $ concat inc
 
