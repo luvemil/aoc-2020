@@ -33,6 +33,9 @@ data Exercise
     | A21E10 FilePath
     | A21E11 FilePath
     | A21E12 FilePath
+    | A21E13 FilePath
+    | A21E14 FilePath
+    | A21E15 FilePath
     | None
     deriving (Generic, Show)
 
