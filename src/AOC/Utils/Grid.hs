@@ -2,8 +2,7 @@ module AOC.Utils.Grid where
 
 import AOC.Utils (joinWith, uniq, (!?))
 import Control.Lens
-import Data.Bifunctor (first)
-import Data.Maybe (catMaybes, fromJust)
+import Data.Maybe (catMaybes, fromMaybe)
 
 data Grid a = Grid Int Int [a]
     -- { width :: Int
@@ -120,3 +119,34 @@ instance Ixed (Grid a) where
     ix :: (Int, Int) -> Traversal' (Grid a) a
     ix (x, y) handler (Grid w h xs) =
         Grid w h <$> traverseOf (ix (y * w + x)) handler xs
+
+add :: forall a. Monoid a => Grid a -> Grid a -> Grid a
+add grid1@(Grid w h _) grid2@(Grid w' h' _) =
+    let w'' = max w w'
+        h'' = max h h'
+        extract = fromMaybe mempty
+        getPos g i = getPosition (i `mod` w'') (i `div` w'') g
+        -- TODO: substitute with [mempty | _ <- [], _ <- []] ^ itraversed
+        zs =
+            [mempty :: a | _ <- [1 .. w''], _ <- [1 .. h'']]
+            & itraversed
+                %@~ \i _ -> extract (getPos grid1 i) <> extract (getPos grid2 i)
+     in -- zs =
+        --     [ extract (getPosition x y grid1) <> extract (getPosition x y grid2)
+        --     | x <- [0 .. (w'' - 1)]
+        --     , y <- [0 .. (h'' - 1)]
+        --     ]
+        Grid w'' h'' zs
+
+shift :: forall a. Monoid a => Int -> Int -> Grid a -> Grid a
+shift x y grid@(Grid w h _) =
+    let w' = w + x
+        h' = h + y
+        extract = fromMaybe mempty
+        getPos g i = getPosition ((i `mod` w') - x) ((i `div` w') - y) g
+        -- TODO: substitute with itraversed directly on a new Grid of the correct size
+        zs =
+            [mempty :: a | _ <- [1 .. w'], _ <- [1 .. h']]
+            & itraversed
+                %@~ \i _ -> extract (getPos grid i)
+     in Grid w' h' zs

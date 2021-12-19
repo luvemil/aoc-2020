@@ -170,6 +170,7 @@ test-suite advent-of-code2020-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      AOC.Utils.GridSpec
       Paths_advent_of_code2020
   hs-source-dirs:
       test
@@ -199,17 +200,20 @@ test-suite advent-of-code2020-test
       TypeOperators
   ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Widentities -Wredundant-constraints -fhide-source-paths -Wpartial-fields -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      advent-of-code2020
+      QuickCheck
+    , advent-of-code2020
     , aeson
     , array
     , base >=4.7 && <5
     , bytestring
     , containers
     , generic-lens
+    , hspec
     , lens
     , megaparsec
     , mtl
     , optparse-generic
+    , quickcheck-io
     , regex-tdfa
     , text
     , time

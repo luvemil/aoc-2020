@@ -96,3 +96,9 @@ tests:
       - -with-rtsopts=-N
     dependencies:
       - advent-of-code2020
+      - hspec
+      - QuickCheck
+      - quickcheck-io
+      # - hspec-wai
+      #    - hspec-wai-json
+      # - wai-extra

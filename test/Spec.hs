@@ -1,2 +1,4 @@
-main :: IO ()
-main = putStrLn "Test suite not yet implemented"
+-- this compiler pragma allows GHC to automatically discover all Hspec Test Specs.
+{-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+
+module Spec where
