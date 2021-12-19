@@ -12,13 +12,31 @@ data Grid a = Grid Int Int [a]
     deriving (Show, Eq)
 
 instance Functor Grid where
-    fmap f (Grid w h xs) = Grid w h (map f xs)
+    fmap f (Grid w h xs) = Grid w h $ map f xs
 
 instance Foldable Grid where
     foldMap f (Grid _ _ xs) = foldMap f xs
 
 instance Traversable Grid where
     traverse f (Grid w h xs) = Grid w h <$> traverse f xs
+
+convertIndex :: Grid a -> ((Int, Int) -> b) -> Int -> b
+convertIndex (Grid w _ _) f = f'
+  where
+    f' i = f (i `mod` w, i `div` w)
+
+instance FunctorWithIndex (Int, Int) Grid where
+    imap f grid@(Grid w h xs) = Grid w h $ imap (convertIndex grid f) xs
+
+instance FoldableWithIndex (Int, Int) Grid where
+    ifoldMap f grid@(Grid _ _ xs) = ifoldMap (convertIndex grid f) xs
+    ifoldr f b grid@(Grid _ _ xs) = ifoldr (convertIndex grid f) b xs
+    ifoldr' f b grid@(Grid _ _ xs) = ifoldr' (convertIndex grid f) b xs
+    ifoldl f b grid@(Grid _ _ xs) = ifoldl (convertIndex grid f) b xs
+    ifoldl' f b grid@(Grid _ _ xs) = ifoldl' (convertIndex grid f) b xs
+
+instance TraversableWithIndex (Int, Int) Grid where
+    itraverse f grid@(Grid w h xs) = Grid w h <$> itraverse (convertIndex grid f) xs
 
 _positions :: Fold (Grid a) (Int, Int)
 _positions = folding $ \(Grid w h _) -> [(x, y) | x <- [0 .. (w - 1)], y <- [0 .. (h - 1)]]
