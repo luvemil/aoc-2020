@@ -6,11 +6,35 @@ import Control.Lens.Operators
 import Data.Maybe (fromJust)
 import Data.Monoid (Sum (..))
 import Test.Hspec
+import Test.Hspec.QuickCheck (prop)
 import Test.QuickCheck
 
 main :: IO ()
 main = hspec spec
 
+myGrid :: Arbitrary a => Gen (Grid a)
+myGrid = do
+    (w, h) <- arbitrary `suchThat` (\(x, y) -> x > 0 && y > 0)
+    -- xs <- sequenceA [arbitrary | _ <- [1 .. w], _ <- [1 .. h]]
+    xs <- vector (w * h)
+    pure $ Grid w h xs
+
+instance Arbitrary a => Arbitrary (Grid a) where
+    arbitrary = myGrid
+
+prop_commutativeAdd :: (Monoid a, Eq a) => Grid a -> Grid a -> Bool
+prop_commutativeAdd x y = x `add` y == y `add` x
+
+prop_associativeAdd :: (Monoid a, Eq a) => Grid a -> Grid a -> Grid a -> Bool
+prop_associativeAdd x y z = (x `add` y) `add` z == x `add` (y `add` z)
+
+prop_commutativeShift :: (Monoid a, Eq a) => (Int, Int) -> Grid a -> Bool
+prop_commutativeShift (x, y) grid = shift (- x') (- y') (shift x' y' grid) == grid
+  where
+    x' = abs x
+    y' = abs y
+
+-- Some matrix data
 g1Els :: [[Integer]]
 g1Els =
     [ [1, 2, 3]
@@ -75,6 +99,12 @@ spec =
             add g1 (shift 1 1 g2) `shouldBe` g5
         it "g1 + shift 1 2 g2" $
             add g1 (shift 1 2 g2) `shouldBe` g6
+        prop "add is commutative" $
+            prop_commutativeAdd @(Sum Int)
+        prop "add is associative" $
+            prop_associativeAdd @(Sum Int)
+        prop "shift -x (shift x grid) is id" $
+            prop_commutativeShift @(Sum Int)
   where
     [g1, g1Shifted, g2, g3, g4, g5, g6] =
         map
