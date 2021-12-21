@@ -110,6 +110,11 @@ _sqNbhd (x, y) handler grid@(Grid w h as) = Grid w h <$> itraverse h'' as
             then handler a
             else pure a
 
+_isqNbhd :: (Int, Int) -> IndexedTraversal' (Int, Int) (Grid a) a
+_isqNbhd (x, y) = itraversed . indices (`elem` nbhdPos)
+  where
+    nbhdPos = [(x + i, y + j) | i <- [-1, 0, 1], j <- [-1, 0, 1], i /= 0 || j /= 0]
+
 createGrid :: MonadFail m => [[a]] -> m (Grid a)
 createGrid xss = do
     let ls = uniq $ map length xss
@@ -136,35 +141,31 @@ type instance IxValue (Grid a) = a
 instance Ixed (Grid a) where
     ix :: (Int, Int) -> Traversal' (Grid a) a
     ix (x, y) handler (Grid w h xs) =
-        Grid w h <$> traverseOf (ix (y * w + x)) handler xs
+        Grid w h <$> traverseOf theFold handler' xs
+      where
+        (theFold, handler') =
+            if x >= 0 && y >= 0 && x < w && y < h
+                then (ix (y * w + x), handler)
+                else (traversed, pure)
 
 add :: forall a. Monoid a => Grid a -> Grid a -> Grid a
 add grid1@(Grid w h _) grid2@(Grid w' h' _) =
     let w'' = max w w'
         h'' = max h h'
+        emptyGrid = Grid w'' h'' [mempty :: a | _ <- [1 .. w'' * h'']]
         extract = fromMaybe mempty
-        getPos g i = getPosition (i `mod` w'') (i `div` w'') g
-        -- TODO: substitute with [mempty | _ <- [], _ <- []] ^ itraversed
-        zs =
-            [mempty :: a | _ <- [1 .. w''], _ <- [1 .. h'']]
-            & itraversed
-                %@~ \i _ -> extract (getPos grid1 i) <> extract (getPos grid2 i)
-     in -- zs =
-        --     [ extract (getPosition x y grid1) <> extract (getPosition x y grid2)
-        --     | x <- [0 .. (w'' - 1)]
-        --     , y <- [0 .. (h'' - 1)]
-        --     ]
-        Grid w'' h'' zs
+     in emptyGrid & itraversed %@~ \(x, y) _ ->
+            extract (getPosition x y grid1) <> extract (getPosition x y grid2)
 
 shift :: forall a. Monoid a => Int -> Int -> Grid a -> Grid a
 shift x y grid@(Grid w h _) =
     let w' = w + x
         h' = h + y
         extract = fromMaybe mempty
-        getPos g i = getPosition ((i `mod` w') - x) ((i `div` w') - y) g
-        -- TODO: substitute with itraversed directly on a new Grid of the correct size
-        zs =
-            [mempty :: a | _ <- [1 .. w'], _ <- [1 .. h']]
-            & itraversed
-                %@~ \i _ -> extract (getPos grid i)
-     in Grid w' h' zs
+        emptyGrid = Grid w' h' [mempty :: a | _ <- [1 .. w' * h']]
+     in emptyGrid & itraversed %@~ \(i, j) _ ->
+            -- extract (getPosition (i - x) (j - y) grid)
+            extract (grid ^? ix (i - x, j - y))
+
+shift2 :: forall a. Monoid a => (Int, Int) -> Grid a -> Grid a
+shift2 = uncurry shift

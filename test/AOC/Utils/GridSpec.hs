@@ -3,6 +3,7 @@ module AOC.Utils.GridSpec where
 import AOC.Utils.Grid
 import Control.Lens.Combinators
 import Control.Lens.Operators
+import qualified Data.List as L
 import Data.Maybe (fromJust)
 import Data.Monoid (Sum (..))
 import Test.Hspec
@@ -14,8 +15,8 @@ main = hspec spec
 
 myGrid :: Arbitrary a => Gen (Grid a)
 myGrid = do
-    (w, h) <- arbitrary `suchThat` (\(x, y) -> x > 0 && y > 0)
-    -- xs <- sequenceA [arbitrary | _ <- [1 .. w], _ <- [1 .. h]]
+    -- Bound the size to grids of 400 entries (x * y <= 400)
+    (w, h) <- arbitrary `suchThat` (\(x, y) -> x > 0 && y > 0 && x * y <= 400)
     xs <- vector (w * h)
     pure $ Grid w h xs
 
@@ -33,6 +34,21 @@ prop_commutativeShift (x, y) grid = shift (- x') (- y') (shift x' y' grid) == gr
   where
     x' = abs x
     y' = abs y
+
+prop_getPositionEqualsIx :: Eq a => (Int, Int) -> Grid a -> Bool
+prop_getPositionEqualsIx (x, y) grid = grid ^? ix (x, y) == getPosition x y grid
+
+prop_sqNbhdWithAndWithoutIndices :: Ord a => (Int, Int) -> Grid a -> Bool
+prop_sqNbhdWithAndWithoutIndices (x, y) grid =
+    let nbhd1 = grid ^.. _sqNbhd (x, y)
+        nbhd2 = grid ^.. _isqNbhd (x, y)
+     in L.sort nbhd1 == L.sort nbhd2
+
+prop_sqNbhdPos :: (Int, Int) -> Grid a -> Bool
+prop_sqNbhdPos (x, y) grid =
+    let nbhdPos1 = map fst $ grid ^@.. _isqNbhd (x, y)
+        nbhdPos2 = getSquareNeighborPos x y grid
+     in L.sort nbhdPos1 == L.sort nbhdPos2
 
 -- Some matrix data
 g1Els :: [[Integer]]
@@ -105,6 +121,12 @@ spec =
             prop_associativeAdd @(Sum Int)
         prop "shift -x (shift x grid) is id" $
             prop_commutativeShift @(Sum Int)
+        prop "ix (i, j) is the same as getPosition i j" $
+            prop_getPositionEqualsIx @Int
+        prop "_sqNbhd == _isqNbhd" $
+            prop_sqNbhdWithAndWithoutIndices @Int
+        prop "_isqNbhd == getSquareNeiborhoodPos" $
+            prop_sqNbhdPos @Bool
   where
     [g1, g1Shifted, g2, g3, g4, g5, g6] =
         map
