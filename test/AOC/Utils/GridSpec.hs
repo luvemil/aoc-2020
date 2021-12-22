@@ -16,7 +16,7 @@ main = hspec spec
 myGrid :: Arbitrary a => Gen (Grid a)
 myGrid = do
     -- Bound the size to grids of 400 entries (x * y <= 400)
-    (w, h) <- arbitrary `suchThat` (\(x, y) -> x > 0 && y > 0 && x * y <= 400)
+    (w, h) <- arbitrary `suchThat` (\(x, y) -> x > 0 && y > 0 && x <= 5 && y <= 5)
     xs <- vector (w * h)
     pure $ Grid w h xs
 
@@ -49,6 +49,12 @@ prop_sqNbhdPos (x, y) grid =
     let nbhdPos1 = map fst $ grid ^@.. _isqNbhd (x, y)
         nbhdPos2 = getSquareNeighborPos x y grid
      in L.sort nbhdPos1 == L.sort nbhdPos2
+
+prop_doubleFlipV :: Eq a => Grid a -> Bool
+prop_doubleFlipV grid = (flipV . flipV) grid == grid
+
+prop_doubleFlipH :: Eq a => Grid a -> Bool
+prop_doubleFlipH grid = (flipH . flipH) grid == grid
 
 -- Some matrix data
 g1Els :: [[Integer]]
@@ -127,6 +133,10 @@ spec =
             prop_sqNbhdWithAndWithoutIndices @Int
         prop "_isqNbhd == getSquareNeiborhoodPos" $
             prop_sqNbhdPos @Bool
+        prop "flipV . flipV == id" $
+            prop_doubleFlipV @Int
+        prop "flipH . flipH == id" $
+            prop_doubleFlipH @Int
   where
     [g1, g1Shifted, g2, g3, g4, g5, g6] =
         map

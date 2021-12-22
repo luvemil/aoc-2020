@@ -129,6 +129,11 @@ showGrid grid =
         showRow (x : xs) = show x ++ showRow xs
      in joinWith '\n' gridRows
 
+prettyGrid :: Grid Char -> String
+prettyGrid grid =
+    let gridRows = grid ^.. _rows
+     in joinWith '\n' gridRows
+
 -- getIndexedGrid :: forall a m. MonadFail m => Grid a -> m (Grid (a, (Int, Int)))
 -- getIndexedGrid grid@(Grid w h _) = createGrid ixedVals
 --   where
@@ -169,3 +174,12 @@ shift x y grid@(Grid w h _) =
 
 shift2 :: forall a. Monoid a => (Int, Int) -> Grid a -> Grid a
 shift2 = uncurry shift
+
+{- | This method is highly unsafe, it deeply depends on how the data is stored
+   inside the grid
+-}
+flipV :: Grid a -> Grid a
+flipV grid@(Grid _ h _) = grid & itraversed %@~ \(x, y) _ -> grid ^?! ix (x, h - y - 1)
+
+flipH :: Grid a -> Grid a
+flipH grid@(Grid w _ _) = grid & itraversed %@~ \(x, y) _ -> grid ^?! ix (w - x - 1, y)
