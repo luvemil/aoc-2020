@@ -4,7 +4,7 @@ import AOC.Utils.Grid
 import Control.Lens.Combinators
 import Control.Lens.Operators
 import qualified Data.List as L
-import Data.Maybe (fromJust)
+import Data.Maybe (catMaybes, fromJust)
 import Data.Monoid (Sum (..))
 import Test.Hspec
 import Test.Hspec.QuickCheck (prop)
@@ -55,6 +55,12 @@ prop_doubleFlipV grid = (flipV . flipV) grid == grid
 
 prop_doubleFlipH :: Eq a => Grid a -> Bool
 prop_doubleFlipH grid = (flipH . flipH) grid == grid
+
+prop_nbhdVals :: Ord a => (Int, Int) -> Grid a -> Bool
+prop_nbhdVals (x, y) grid =
+    let nbhd1 = grid ^.. _inbhd (x, y)
+        nbhd2 = catMaybes $ getNeighbors x y grid ^.. each
+     in L.sort nbhd1 == L.sort nbhd2
 
 -- Some matrix data
 g1Els :: [[Integer]]
@@ -137,6 +143,8 @@ spec =
             prop_doubleFlipV @Int
         prop "flipH . flipH == id" $
             prop_doubleFlipH @Int
+        prop "_inbhd" $
+            prop_nbhdVals @Int
   where
     [g1, g1Shifted, g2, g3, g4, g5, g6] =
         map

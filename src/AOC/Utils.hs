@@ -103,5 +103,6 @@ countOccurrencies = F.foldl' (flip (M.alter func)) M.empty
     func Nothing = Just 1
     func (Just x) = Just $ x + 1
 
+-- TODO: specify precedence
 (!?) :: (Traversable t) => t a -> Int -> Maybe a
 xs !? n = xs ^? dropping n traversed

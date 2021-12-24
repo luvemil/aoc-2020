@@ -101,6 +101,11 @@ getSquareNeighbors x y grid
   where
     func (x', y') = getPosition x' y' grid
 
+_inbhd :: (Int, Int) -> IndexedTraversal' (Int, Int) (Grid a) a
+_inbhd (x, y) = itraversed . indices (`elem` nbhdPos)
+  where
+    nbhdPos = [(x + i, y + j) | i <- [-1, 0, 1], j <- [-1, 0, 1], (i == 0 || j == 0) && (i /= 0 || j /= 0)]
+
 _sqNbhd :: forall a. (Int, Int) -> Traversal' (Grid a) a
 _sqNbhd (x, y) handler grid@(Grid w h as) = Grid w h <$> itraverse h'' as
   where
