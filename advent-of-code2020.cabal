@@ -59,6 +59,7 @@ library
       AOC.Utils
       AOC.Utils.Grid
       AOC.Utils.Math
+      AOC.Utils.Tree
       Lib
       Lib.App
       Lib.App.Env
@@ -171,6 +172,7 @@ test-suite advent-of-code2020-test
   main-is: Spec.hs
   other-modules:
       AOC.Utils.GridSpec
+      AOC.Utils.TreeSpec
       Paths_advent_of_code2020
   hs-source-dirs:
       test
