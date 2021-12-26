@@ -5,7 +5,7 @@ import AOC.Utils.Grid
 import AOC.Utils.Tree
 import Control.Lens
 import Control.Monad.Reader
-import Control.Monad.State (StateT, execState, get, put)
+import Control.Monad.State (StateT, execStateT, get, put)
 import Data.Maybe (catMaybes, fromMaybe)
 import Data.Tree (Tree (Node))
 import Text.Megaparsec (many, parseMaybe)
@@ -64,14 +64,14 @@ computeAvailable grid@(Grid w h _) path =
                     adjacents
             else adjacents
 
-increasePath :: Path -> Int -> AppMonad (Maybe (Tree (Int, Int)))
+increasePath :: Path -> Int -> AppMonad (Maybe (Tree ((Int, Int), Path)))
 increasePath path maxSize
     | length path > maxSize = pure Nothing
     | otherwise = do
         grid <- asks id
         let lastNode = getLastNode path
         if lastNode == endNode grid
-            then pure . Just $ Node lastNode []
+            then pure . Just $ Node (lastNode, path) []
             else do
                 let available = computeAvailable grid path
                     newPaths = [path ++ [x] | x <- available]
@@ -80,44 +80,46 @@ increasePath path maxSize
                 let remaining = catMaybes inc
                 if null remaining
                     then pure Nothing
-                    else pure . Just $ Node lastNode remaining
+                    else pure . Just $ Node (lastNode, path) remaining
 
 computeRiskValue :: Num a => Grid a -> Path -> a
 computeRiskValue grid path = sumOf (itraversed . indices (`elem` path)) grid
 
-type MinCompMonad = StateT (Maybe Int) Identity
+type MinCompMonad = StateT (Maybe (Int, Path)) IO
 
-stepMin :: Grid Int -> Path -> MinCompMonad [Maybe Int] -> MinCompMonad (Maybe Int)
-stepMin grid path mxs = do
-    cur <- get
+stepMin :: Grid Int -> ((Int, Int), Path) -> MinCompMonad [Maybe Int] -> MinCompMonad (Maybe Int)
+stepMin grid (_, path) mxs = do
+    -- cur <- get >>= \s -> pure $ s >>= \x -> pure $ fst x
+    cur <- get <&> fmap fst
     let riskVal = computeRiskValue grid path
-    -- liftIO . putStrLn $ "Found riskVal: " ++ show riskVal ++ " for path: " ++ show path
+    liftIO . putStrLn $ "Found riskVal: " ++ show riskVal ++ " for path: " ++ show path
     if maybe False (riskVal >=) cur
         then do
             -- Short circuit
-            -- liftIO . putStrLn $ "Short circuiting path: " ++ show path
+            liftIO . putStrLn $ "Short circuiting path: " ++ show path
             pure Nothing
         else
             mxs >>= \case
                 -- Leaf
                 [] -> do
-                    -- liftIO . putStrLn $ "Found min candidate path: " ++ show path
-                    put $ Just riskVal
+                    liftIO . putStrLn $ "Found min candidate path: " ++ show path
+                    put $ Just (riskVal, path)
                     pure $ Just riskVal
                 -- Path
                 xs -> do
-                    -- liftIO . putStrLn $ "Continue after path: " ++ show path
+                    liftIO . putStrLn $ "Continue after path: " ++ show path
                     pure . Just . minimum . catMaybes $ xs
 
 part1 :: Grid Int -> IO Int
 part1 grid = do
-    allPaths <- embedMaybe $ runReader (increasePath [] 10000) grid
+    allPaths <- embedMaybe $ runReader (increasePath [startNode] 10000) grid
     putStrLn $ "RunReader done"
-    let expandedPaths = collect (:) [] allPaths
-    let res = execState (foldTreeM (stepMin grid) expandedPaths) (Just 41)
+    res <- execStateT (foldTreeM (stepMin grid) allPaths) Nothing
     case res of
         Nothing -> error "Not Found"
-        Just x -> pure x
+        Just (x, path) -> do
+            putStrLn $ "Found min path: " ++ show path
+            pure x
 
 parseRow :: Parser [Int]
 parseRow = do
