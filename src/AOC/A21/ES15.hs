@@ -2,11 +2,12 @@ module AOC.A21.ES15 where
 
 import AOC.Utils
 import AOC.Utils.Grid
+import AOC.Utils.Tree
 import Control.Lens
 import Control.Monad.Reader
-import Control.Monad.State (State)
+import Control.Monad.State (StateT, execState, get, put)
 import Data.Maybe (catMaybes, fromMaybe)
-import Data.Tree (Tree (Node), foldTree)
+import Data.Tree (Tree (Node))
 import Text.Megaparsec (many, parseMaybe)
 import Text.Megaparsec.Char (digitChar)
 import Text.Read (readMaybe)
@@ -81,16 +82,42 @@ increasePath path maxSize
                     then pure Nothing
                     else pure . Just $ Node lastNode remaining
 
+computeRiskValue :: Num a => Grid a -> Path -> a
+computeRiskValue grid path = sumOf (itraversed . indices (`elem` path)) grid
+
+type MinCompMonad = StateT (Maybe Int) Identity
+
+stepMin :: Grid Int -> Path -> MinCompMonad [Maybe Int] -> MinCompMonad (Maybe Int)
+stepMin grid path mxs = do
+    cur <- get
+    let riskVal = computeRiskValue grid path
+    -- liftIO . putStrLn $ "Found riskVal: " ++ show riskVal ++ " for path: " ++ show path
+    if maybe False (riskVal >=) cur
+        then do
+            -- Short circuit
+            -- liftIO . putStrLn $ "Short circuiting path: " ++ show path
+            pure Nothing
+        else
+            mxs >>= \case
+                -- Leaf
+                [] -> do
+                    -- liftIO . putStrLn $ "Found min candidate path: " ++ show path
+                    put $ Just riskVal
+                    pure $ Just riskVal
+                -- Path
+                xs -> do
+                    -- liftIO . putStrLn $ "Continue after path: " ++ show path
+                    pure . Just . minimum . catMaybes $ xs
+
 part1 :: Grid Int -> IO Int
 part1 grid = do
     allPaths <- embedMaybe $ runReader (increasePath [] 10000) grid
     putStrLn $ "RunReader done"
-    let myFunc :: (Int, Int) -> State Int Int
-        myFunc = undefined
-        res = traverse myFunc allPaths
-    let depth = foldTree (\_ xs -> if null xs then (0 :: Int) else 1 + maximum xs) allPaths
-    putStrLn $ "Depth: " ++ show depth
-    pure 0
+    let expandedPaths = collect (:) [] allPaths
+    let res = execState (foldTreeM (stepMin grid) expandedPaths) (Just 41)
+    case res of
+        Nothing -> error "Not Found"
+        Just x -> pure x
 
 parseRow :: Parser [Int]
 parseRow = do
