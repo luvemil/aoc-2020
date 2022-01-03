@@ -188,3 +188,27 @@ flipV grid@(Grid _ h _) = grid & itraversed %@~ \(x, y) _ -> grid ^?! ix (x, h -
 
 flipH :: Grid a -> Grid a
 flipH grid@(Grid w _ _) = grid & itraversed %@~ \(x, y) _ -> grid ^?! ix (w - x - 1, y)
+
+concatGridH :: forall a. Monoid a => Grid a -> Grid a -> Grid a
+concatGridH g1@(Grid w1 h1 _) g2@(Grid w2 h2 _) =
+    let w = w1 + w2
+        h = max h1 h2
+        emptyGrid = Grid w h [mempty :: a | _ <- [1 .. w * h]]
+        getP i@(x, y) =
+            fromMaybe mempty $
+                if x < w1
+                    then g1 ^? ix i
+                    else g2 ^? ix (x - w1, y)
+     in emptyGrid & itraversed %@~ \i _ -> getP i
+
+concatGridV :: forall a. Monoid a => Grid a -> Grid a -> Grid a
+concatGridV g1@(Grid w1 h1 _) g2@(Grid w2 h2 _) =
+    let w = max w1 w2
+        h = h1 + h2
+        emptyGrid = Grid w h [mempty :: a | _ <- [1 .. w * h]]
+        getP i@(x, y) =
+            fromMaybe mempty $
+                if y < h1
+                    then g1 ^? ix i
+                    else g2 ^? ix (x, y - h1)
+     in emptyGrid & itraversed %@~ \i _ -> getP i

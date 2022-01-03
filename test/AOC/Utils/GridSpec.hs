@@ -62,6 +62,16 @@ prop_nbhdVals (x, y) grid =
         nbhd2 = catMaybes $ getNeighbors x y grid ^.. each
      in L.sort nbhd1 == L.sort nbhd2
 
+prop_concatHShiftAdd :: (Eq a, Monoid a) => Grid a -> Grid a -> Bool
+prop_concatHShiftAdd g1@(Grid w1 h1 _) g2@(Grid w2 h2 _) =
+    g1 `concatGridH` g2
+        == g1 `add` shift w1 0 g2
+
+prop_concatVShiftAdd :: (Eq a, Monoid a) => Grid a -> Grid a -> Bool
+prop_concatVShiftAdd g1@(Grid w1 h1 _) g2@(Grid w2 h2 _) =
+    g1 `concatGridV` g2
+        == g1 `add` shift 0 h1 g2
+
 -- Some matrix data
 g1Els :: [[Integer]]
 g1Els =
@@ -143,8 +153,12 @@ spec =
             prop_doubleFlipV @Int
         prop "flipH . flipH == id" $
             prop_doubleFlipH @Int
-        prop "_inbhd" $
-            prop_nbhdVals @Int
+        -- prop "_inbhd" $
+        --     prop_nbhdVals @Int
+        prop "concatGridH" $
+            prop_concatHShiftAdd @(Sum Int)
+        prop "concatGridV" $
+            prop_concatVShiftAdd @(Sum Int)
   where
     [g1, g1Shifted, g2, g3, g4, g5, g6] =
         map

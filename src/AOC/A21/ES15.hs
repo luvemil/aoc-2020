@@ -2,11 +2,14 @@ module AOC.A21.ES15 where
 
 import AOC.Utils
 import AOC.Utils.Grid
+import AOC.Utils.Search
 import AOC.Utils.Tree
 import Control.Lens
 import Control.Monad.Reader
-import Control.Monad.State (StateT, execStateT, get, put)
+import Control.Monad.State (StateT, execStateT, get, modify', put)
+import qualified Data.Map as M
 import Data.Maybe (catMaybes, fromMaybe)
+import Data.Monoid (Sum (..))
 import Data.Tree (Tree (Node))
 import Text.Megaparsec (many, parseMaybe)
 import Text.Megaparsec.Char (digitChar)
@@ -85,15 +88,36 @@ increasePath path maxSize
 computeRiskValue :: Num a => Grid a -> Path -> a
 computeRiskValue grid path = sumOf (itraversed . indices (`elem` path)) grid
 
-type MinCompMonad = StateT (Maybe (Int, Path)) IO
+computeRiskValueMemoized :: Path -> MinCompMonad Int
+computeRiskValueMemoized path = do
+    (_, cache) <- get
+    case M.lookup (init path) cache of
+        Nothing -> do
+            grid <- ask
+            let val = computeRiskValue grid path
+            modify' $ \(x, _) -> (x, M.insert path val cache)
+            pure val
+        Just n -> do
+            grid <- ask
+            let val = n + fromMaybe 0 (grid ^? ix (last path))
+            modify' $ \(x, _) -> (x, M.insert path val cache)
+            pure val
 
-stepMin :: Grid Int -> ((Int, Int), Path) -> MinCompMonad [Maybe Int] -> MinCompMonad (Maybe Int)
-stepMin grid (_, path) mxs = do
+type RiskValueCache = M.Map Path Int
+
+type MinCompMonad = StateT (Maybe (Int, Path), RiskValueCache) (ReaderT (Grid Int) IO)
+
+stepMin :: ((Int, Int), Path) -> MinCompMonad [Maybe Int] -> MinCompMonad (Maybe Int)
+stepMin (_, path) mxs = do
     -- cur <- get >>= \s -> pure $ s >>= \x -> pure $ fst x
-    cur <- get <&> fmap fst
-    let riskVal = computeRiskValue grid path
+    cur <- get <&> fmap fst . fst
+    grid <- ask
+    -- let riskVal = computeRiskValue grid path
+    riskVal <- computeRiskValueMemoized path
+    let lastNode = getLastNode path
+        heuristic = manhattanDist2 lastNode (endNode grid)
     liftIO . putStrLn $ "Found riskVal: " ++ show riskVal ++ " for path: " ++ show path
-    if maybe False (riskVal >=) cur
+    if maybe False (riskVal - heuristic >=) cur
         then do
             -- Short circuit
             liftIO . putStrLn $ "Short circuiting path: " ++ show path
@@ -103,7 +127,8 @@ stepMin grid (_, path) mxs = do
                 -- Leaf
                 [] -> do
                     liftIO . putStrLn $ "Found min candidate path: " ++ show path
-                    put $ Just (riskVal, path)
+                    -- put $ Just (riskVal, path)
+                    _ <- modify' $ \(_, x) -> (Just (riskVal, path), x)
                     pure $ Just riskVal
                 -- Path
                 xs -> do
@@ -114,12 +139,72 @@ part1 :: Grid Int -> IO Int
 part1 grid = do
     allPaths <- embedMaybe $ runReader (increasePath [startNode] 10000) grid
     putStrLn $ "RunReader done"
-    res <- execStateT (foldTreeM (stepMin grid) allPaths) Nothing
+    (res, _) <- runReaderT (execStateT (foldTreeM stepMin allPaths) (Nothing, M.empty)) grid
     case res of
         Nothing -> error "Not Found"
         Just (x, path) -> do
             putStrLn $ "Found min path: " ++ show path
-            pure x
+            pure $ x - fromMaybe 0 (grid ^? ix (0, 0))
+
+isGridAdjacent :: (Int, Int) -> (Int, Int) -> Bool
+isGridAdjacent (x, y) (x', y') = abs (x - x') == 1 || abs (y - y') == 1
+
+toPosMap :: Grid a -> M.Map (Int, Int) a
+toPosMap grid = M.fromList $ grid ^@.. itraversed
+
+getEdgeWeight :: Grid a -> (Int, Int) -> (Int, Int) -> ExtNum a
+getEdgeWeight grid p q =
+    if p `isGridAdjacent` q
+        then maybe Infinity Finite $ grid ^? ix q
+        else Infinity
+
+getEdgeWeight' :: M.Map (Int, Int) a -> (Int, Int) -> (Int, Int) -> ExtNum a
+getEdgeWeight' posMap p q =
+    if p `isGridAdjacent` q
+        then maybe Infinity Finite $ M.lookup p posMap
+        else Infinity
+
+part1' :: Grid Int -> IO Int
+part1' grid = do
+    let searchConfig =
+            SearchConfig
+                { scStartNode = startNode
+                , scEndNode = endNode grid
+                , scHeuristic = \x -> Finite $ manhattanDist2 x (endNode grid)
+                , scGetNeighbors = \(x, y) -> getNeighborPos x y grid ^.. each . _Just
+                , scEdgeWeight = getEdgeWeight grid
+                }
+        minWeightPath = reverse $ searchAStar searchConfig
+    putStrLn $ "Found min path: " ++ show minWeightPath
+    pure $ computeRiskValue grid (tail minWeightPath)
+
+part2' :: Grid Int -> IO Int
+part2' grid = do
+    let posMap = grid `seq` toPosMap grid
+        searchConfig =
+            SearchConfig
+                { scStartNode = startNode
+                , scEndNode = endNode grid
+                , scHeuristic = \x -> Finite $ manhattanDist2 x (endNode grid)
+                , scGetNeighbors = \(x, y) -> getNeighborPos x y grid ^.. each . _Just
+                , scEdgeWeight = getEdgeWeight' posMap
+                }
+        minWeightPath = reverse $ searchAStar searchConfig
+    putStrLn $ "Found min path: " ++ show minWeightPath
+    pure $ computeRiskValue grid (tail minWeightPath)
+
+computeFullMap :: Grid Int -> Grid Int
+computeFullMap grid@(Grid w h _) =
+    let mgrid = grid & traversed %~ Sum
+        gridH = mgrid `concatGridH` mgrid `concatGridH` mgrid `concatGridH` mgrid `concatGridH` mgrid
+        gridV = gridH `concatGridV` gridH `concatGridV` gridH `concatGridV` gridH `concatGridV` gridH
+     in gridV
+            & traversed %~ getSum
+            & itraversed
+                %@~ ( \(x, y) a ->
+                        a + (x `div` w) + (y `div` h)
+                    )
+            & traversed %~ \a -> if a > 9 then a - 9 else a
 
 parseRow :: Parser [Int]
 parseRow = do
@@ -135,5 +220,9 @@ loadData fp = do
 main :: FilePath -> IO ()
 main fp = do
     grid <- loadData fp
-    res1 <- part1 grid
+    res1 <- part1' grid
     putStrLn $ "Res1: " ++ show res1
+    let fullGrid = computeFullMap grid & traversed %~ \x -> if x > 9 then x - 9 else x
+    -- putStrLn $ showGrid fullGrid
+    res2 <- part2' $ fullGrid
+    putStrLn $ "Res2: " ++ show res2

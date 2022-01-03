@@ -59,6 +59,7 @@ library
       AOC.Utils
       AOC.Utils.Grid
       AOC.Utils.Math
+      AOC.Utils.Search
       AOC.Utils.Tree
       Lib
       Lib.App
