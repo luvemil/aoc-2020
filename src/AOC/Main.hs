@@ -11,6 +11,9 @@ import qualified AOC.A21.ES12 as A21E12
 import qualified AOC.A21.ES13 as A21E13
 import qualified AOC.A21.ES14 as A21E14
 import qualified AOC.A21.ES15 as A21E15
+import qualified AOC.A21.ES16 as A21E16
+import qualified AOC.A21.ES17 as A21E17
+import qualified AOC.A21.ES18 as A21E18
 import qualified AOC.A21.ES2 as A21E2
 import qualified AOC.A21.ES3 as A21E3
 import qualified AOC.A21.ES4 as A21E4
@@ -66,6 +69,9 @@ chooseAction (A21E12 fp) = A21E12.main fp
 chooseAction (A21E13 fp) = A21E13.main fp
 chooseAction (A21E14 fp) = A21E14.main fp
 chooseAction (A21E15 fp) = A21E15.main fp
+chooseAction (A21E16 fp) = A21E16.main fp
+chooseAction (A21E17 fp) = A21E17.main fp
+chooseAction (A21E18 fp) = A21E18.main fp
 chooseAction None = liftIO $ putStrLn "Nothing to do"
 
 runExercise :: AppEnv -> IO ()
