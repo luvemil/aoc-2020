@@ -6,6 +6,7 @@ import Control.Lens
 import qualified Data.Foldable as F
 import Data.List (foldl')
 import qualified Data.Map as M
+import Data.Maybe (fromMaybe)
 import Data.Void (Void)
 import Text.Megaparsec
 import Text.Megaparsec.Char (digitChar)
@@ -53,6 +54,15 @@ intParser :: Parser Int
 intParser = do
     val <- readMaybe <$> many digitChar
     embedMaybe val
+
+signedIntParser :: Parser Int
+signedIntParser = do
+    sign <- fromMaybe '+' <$> (optional . try $ oneOf ['+', '-'])
+    val <- intParser
+    case sign of
+        '+' -> pure val
+        '-' -> pure $ -1 * val
+        s -> fail $ "Expected sign to be '-', '+' or nothing, found " <> [s]
 
 arrParser :: Parser a -> Parser b -> Parser [b]
 arrParser sep p = do
