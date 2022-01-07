@@ -73,8 +73,8 @@ computeFullPath p@(x, y) q t@((xs, xe), (ys, ye)) =
 isInTarget :: P -> Target -> Bool
 isInTarget (x, y) ((xs, xe), (ys, ye)) = x >= xs && x <= xe && y >= ys && y <= ye
 
-part1 :: Target -> IO Int
-part1 t@((xs, xe), (ys, ye)) = do
+getAdmissiblePaths :: Target -> IO [[S]]
+getAdmissiblePaths t@((xs, xe), (ys, ye)) = do
     let maxX = max (abs xs) (abs xe)
         maxY = max (abs ys) (abs ye)
         admissibleX = [x | x <- [- maxX .. maxX]]
@@ -86,12 +86,21 @@ part1 t@((xs, xe), (ys, ye)) = do
                 & map (\q -> computeFullPath (0, 0) q t)
                 & filter (not . null)
     -- putStrLn $ "allPaths: " <> show allPaths
-    let admissiblePaths = filter (\ps -> fst (last ps) `isInTarget` t) allPaths
+    pure $ filter (\ps -> fst (last ps) `isInTarget` t) allPaths
+
+part1 :: Target -> IO Int
+part1 t = do
+    admissiblePaths <- getAdmissiblePaths t
     -- putStrLn $ "Admissible paths: " <> show admissiblePaths
     let maximumPath = F.maximumBy (comparing (maximumOf (traversed . _1 . _2))) admissiblePaths
     putStrLn $ "Maximum path: " <> show maximumPath
     let highestPos = maximum $ map (maximumOf (traversed . _1 . _2)) admissiblePaths
     embedMaybe highestPos
+
+part2 :: Target -> IO Int
+part2 t = do
+    admissiblePaths <- getAdmissiblePaths t
+    pure $ length admissiblePaths
 
 main :: FilePath -> IO ()
 main fp = do
@@ -100,3 +109,5 @@ main fp = do
     putStrLn $ "Target: " <> show target
     res1 <- part1 target
     putStrLn $ "Res1: " <> show res1
+    res2 <- part2 target
+    putStrLn $ "Res2: " <> show res2
