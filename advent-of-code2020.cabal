@@ -176,6 +176,7 @@ test-suite advent-of-code2020-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      AOC.A21.ES18Spec
       AOC.Utils.GridSpec
       AOC.Utils.TreeSpec
       Paths_advent_of_code2020
