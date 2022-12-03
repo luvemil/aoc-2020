@@ -39,6 +39,11 @@ library
       AOC.A21.ES16
       AOC.A21.ES17
       AOC.A21.ES18
+      AOC.A21.ES19
+      AOC.A21.ES19.AbstractObjects
+      AOC.A21.ES19.Geometry
+      AOC.A21.ES19.Objects
+      AOC.A21.ES19.Parsers
       AOC.A21.ES2
       AOC.A21.ES3
       AOC.A21.ES4
@@ -109,6 +114,7 @@ library
     , bytestring
     , containers
     , generic-lens
+    , hmatrix
     , lens
     , megaparsec
     , mtl
@@ -160,6 +166,7 @@ executable advent-of-code2020-exe
     , bytestring
     , containers
     , generic-lens
+    , hmatrix
     , lens
     , megaparsec
     , mtl
@@ -216,6 +223,7 @@ test-suite advent-of-code2020-test
     , bytestring
     , containers
     , generic-lens
+    , hmatrix
     , hspec
     , lens
     , megaparsec
