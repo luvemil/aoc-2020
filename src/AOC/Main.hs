@@ -39,6 +39,7 @@ import qualified AOC.ES9 as ES9
 import Control.Monad.IO.Class (MonadIO (liftIO))
 import Lib.App
 import Lib.Exercise
+import qualified AOC.A22.ES3 as A22E3
 
 -- Potentially can be Exercise -> Sem r ()
 chooseAction :: Exercise -> IO ()
@@ -78,6 +79,7 @@ chooseAction (A21E18 fp) = A21E18.main fp
 chooseAction (A21E19 fp) = A21E19.main fp
 chooseAction (A22E1 fp) = A22E1.main fp
 chooseAction (A22E2 fp) = A22E2.main fp
+chooseAction (A22E3 fp) = A22E3.main fp
 chooseAction None = liftIO $ putStrLn "Nothing to do"
 
 runExercise :: AppEnv -> IO ()

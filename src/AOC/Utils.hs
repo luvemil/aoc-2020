@@ -96,6 +96,10 @@ rollingWindows t xs
     | length xs < t = []
     | otherwise = take t xs : rollingWindows t (tail xs)
 
+chunks :: Int -> [a] -> [[a]]
+chunks _ [] = []
+chunks t xs = take t xs : chunks t (drop t xs)
+
 splitExact :: Traversable t => t a -> Int -> [[a]]
 splitExact xs n
     | n < 0 = error "splitExact x n, x should be >= 0"
