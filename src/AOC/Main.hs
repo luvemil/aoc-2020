@@ -14,6 +14,7 @@ import qualified AOC.A21.ES15 as A21E15
 import qualified AOC.A21.ES16 as A21E16
 import qualified AOC.A21.ES17 as A21E17
 import qualified AOC.A21.ES18 as A21E18
+import qualified AOC.A21.ES19 as A21E19
 import qualified AOC.A21.ES2 as A21E2
 import qualified AOC.A21.ES3 as A21E3
 import qualified AOC.A21.ES4 as A21E4
@@ -23,6 +24,7 @@ import qualified AOC.A21.ES7 as A21E7
 import qualified AOC.A21.ES8 as A21E8
 import qualified AOC.A21.ES9 as A21E9
 import qualified AOC.A22.ES1 as A22E1
+import qualified AOC.A22.ES2 as A22E2
 import qualified AOC.ES1 as ES1
 import qualified AOC.ES10 as ES10
 import qualified AOC.ES11 as ES11
@@ -37,7 +39,6 @@ import qualified AOC.ES9 as ES9
 import Control.Monad.IO.Class (MonadIO (liftIO))
 import Lib.App
 import Lib.Exercise
-import qualified AOC.A21.ES19 as A21E19
 
 -- Potentially can be Exercise -> Sem r ()
 chooseAction :: Exercise -> IO ()
@@ -76,10 +77,11 @@ chooseAction (A21E17 fp) = A21E17.main fp
 chooseAction (A21E18 fp) = A21E18.main fp
 chooseAction (A21E19 fp) = A21E19.main fp
 chooseAction (A22E1 fp) = A22E1.main fp
+chooseAction (A22E2 fp) = A22E2.main fp
 chooseAction None = liftIO $ putStrLn "Nothing to do"
 
 runExercise :: AppEnv -> IO ()
 runExercise env = runApp env $ do
-    e <- grab @Exercise
-    liftIO . putStrLn $ "Doing exercise " ++ show e
-    liftIO $ chooseAction e
+  e <- grab @Exercise
+  liftIO . putStrLn $ "Doing exercise " ++ show e
+  liftIO $ chooseAction e

@@ -1,12 +1,12 @@
-module AOC.A22.ES1 where
+module AOC.A22.ES1 (main) where
 
 import AOC.Utils (Parser, embedMaybe, parseList, splitOn)
 import Control.Applicative
 import Data.Foldable (foldl')
+import Data.List (sortOn)
 import Text.Megaparsec (parseMaybe)
 import Text.Megaparsec.Char (digitChar)
 import Text.Read (readMaybe)
-import Data.List (sortOn)
 
 lineParser :: Parser Int
 lineParser = embedMaybe . readMaybe =<< many digitChar
