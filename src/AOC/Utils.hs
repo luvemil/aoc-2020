@@ -119,4 +119,5 @@ countOccurrencies = F.foldl' (flip (M.alter func)) M.empty
 
 -- TODO: specify precedence
 (!?) :: (Traversable t) => t a -> Int -> Maybe a
+infix 4 !?
 xs !? n = xs ^? dropping n traversed

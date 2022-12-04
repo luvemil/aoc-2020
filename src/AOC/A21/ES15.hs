@@ -41,7 +41,7 @@ computeAvailable grid@(Grid w h _) path =
     let lastNode = getLastNode path
         prevNode =
             if length path > 1
-                then path !? (length path - 2)
+                then path !? length path - 2
                 else Nothing
         isNotPrev x = case prevNode of
             Nothing -> True

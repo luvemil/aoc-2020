@@ -2,7 +2,7 @@
 
 module AOC.A21.ES18 where
 
-import AOC.Utils (Parser, embedMaybe, parseList)
+import AOC.Utils (Parser, embedMaybe, parseList, (!?))
 import Control.Applicative ((<|>))
 import Control.Lens
 import Control.Monad (forM_)
@@ -118,7 +118,8 @@ sNumExplodeAt :: Int -> SNum Int -> SNum Int
 sNumExplodeAt i sn =
   let vals = sn ^.. tSPairVal
       -- v = preview (traversed . _SBasePair) $ take 1 . drop i $ vals
-      v = vals ^? taking 1 (dropping i traversed) . _SBasePair
+      -- v = vals ^? taking 1 (dropping i traversed) . _SBasePair
+      v = preview _SBasePair =<< vals !? i
    in case v of
         Nothing -> sn
         Just (x, y) ->
