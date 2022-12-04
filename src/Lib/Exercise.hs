@@ -43,6 +43,7 @@ data Exercise
     | A22E1 FilePath
     | A22E2 FilePath
     | A22E3 FilePath
+    | A22E4 FilePath
     | None
     deriving (Generic, Show)
 
