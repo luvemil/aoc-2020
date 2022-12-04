@@ -1,4 +1,4 @@
-module AOC.ES6 (main) where
+module AOC.A20.ES6 (main) where
 
 import AOC.Utils (splitOn, uniq)
 import Data.Set hiding (map)

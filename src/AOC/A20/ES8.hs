@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module AOC.ES8 (main) where
+module AOC.A20.ES8 (main) where
 
 import AOC.Utils
 import Control.Monad.State

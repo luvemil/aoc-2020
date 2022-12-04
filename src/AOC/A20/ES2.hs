@@ -1,4 +1,4 @@
-module AOC.ES2 (main) where
+module AOC.A20.ES2 (main) where
 
 import AOC.Utils (parseList)
 import Control.Exception (onException)

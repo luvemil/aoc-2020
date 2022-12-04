@@ -1,4 +1,4 @@
-module AOC.ES4 (main) where
+module AOC.A20.ES4 (main) where
 
 import AOC.Utils
 import qualified Data.Map as M

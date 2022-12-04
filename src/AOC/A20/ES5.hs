@@ -1,4 +1,4 @@
-module AOC.ES5 (main) where
+module AOC.A20.ES5 (main) where
 
 import AOC.Utils
 import Data.List (sort)

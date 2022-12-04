@@ -1,4 +1,4 @@
-module AOC.ES7 (main) where
+module AOC.A20.ES7 (main) where
 
 import AOC.Utils
 import Data.Function

@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module AOC.ES11 (main) where
+module AOC.A20.ES11 (main) where
 
 import AOC.Utils
 import Control.Monad (join)

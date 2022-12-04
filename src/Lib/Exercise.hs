@@ -6,17 +6,17 @@ module Lib.Exercise where
 import Options.Generic
 
 data Exercise
-    = ES1 FilePath
-    | ES2 FilePath
-    | ES3 FilePath
-    | ES4 FilePath
-    | ES5 FilePath
-    | ES6 FilePath
-    | ES7 FilePath
-    | ES8 FilePath
-    | ES9 FilePath
-    | ES10 FilePath
-    | ES11 FilePath Int
+    = A20E1 FilePath
+    | A20E2 FilePath
+    | A20E3 FilePath
+    | A20E4 FilePath
+    | A20E5 FilePath
+    | A20E6 FilePath
+    | A20E7 FilePath
+    | A20E8 FilePath
+    | A20E9 FilePath
+    | A20E10 FilePath
+    | A20E11 FilePath Int
     | A19E1 FilePath
     | A19E2 FilePath
     | A19E3 FilePath

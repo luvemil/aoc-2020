@@ -25,17 +25,17 @@ import qualified AOC.A21.ES8 as A21E8
 import qualified AOC.A21.ES9 as A21E9
 import qualified AOC.A22.ES1 as A22E1
 import qualified AOC.A22.ES2 as A22E2
-import qualified AOC.ES1 as ES1
-import qualified AOC.ES10 as ES10
-import qualified AOC.ES11 as ES11
-import qualified AOC.ES2 as ES2
-import qualified AOC.ES3 as ES3
-import qualified AOC.ES4 as ES4
-import qualified AOC.ES5 as ES5
-import qualified AOC.ES6 as ES6
-import qualified AOC.ES7 as ES7
-import qualified AOC.ES8 as ES8
-import qualified AOC.ES9 as ES9
+import qualified AOC.A20.ES1 as A20E1
+import qualified AOC.A20.ES10 as A20E10
+import qualified AOC.A20.ES11 as A20E11
+import qualified AOC.A20.ES2 as A20E2
+import qualified AOC.A20.ES3 as A20E3
+import qualified AOC.A20.ES4 as A20E4
+import qualified AOC.A20.ES5 as A20E5
+import qualified AOC.A20.ES6 as A20E6
+import qualified AOC.A20.ES7 as A20E7
+import qualified AOC.A20.ES8 as A20E8
+import qualified AOC.A20.ES9 as A20E9
 import Control.Monad.IO.Class (MonadIO (liftIO))
 import Lib.App
 import Lib.Exercise
@@ -44,17 +44,17 @@ import qualified AOC.A22.ES4 as A22E4
 
 -- Potentially can be Exercise -> Sem r ()
 chooseAction :: Exercise -> IO ()
-chooseAction (ES1 fp) = ES1.main fp
-chooseAction (ES2 fp) = ES2.main fp
-chooseAction (ES3 fp) = ES3.main fp
-chooseAction (ES4 fp) = ES4.main fp
-chooseAction (ES5 fp) = ES5.main fp
-chooseAction (ES6 fp) = ES6.main fp
-chooseAction (ES7 fp) = ES7.main fp
-chooseAction (ES8 fp) = ES8.main fp
-chooseAction (ES9 fp) = ES9.main fp
-chooseAction (ES10 fp) = ES10.main fp
-chooseAction (ES11 fp x) = ES11.main fp x
+chooseAction (A20E1 fp) = A20E1.main fp
+chooseAction (A20E2 fp) = A20E2.main fp
+chooseAction (A20E3 fp) = A20E3.main fp
+chooseAction (A20E4 fp) = A20E4.main fp
+chooseAction (A20E5 fp) = A20E5.main fp
+chooseAction (A20E6 fp) = A20E6.main fp
+chooseAction (A20E7 fp) = A20E7.main fp
+chooseAction (A20E8 fp) = A20E8.main fp
+chooseAction (A20E9 fp) = A20E9.main fp
+chooseAction (A20E10 fp) = A20E10.main fp
+chooseAction (A20E11 fp x) = A20E11.main fp x
 chooseAction (A19E1 fp) = A19E1.main fp
 chooseAction (A19E2 fp) = A19E2.main fp
 chooseAction (A19E3 fp) = A19E3.main fp

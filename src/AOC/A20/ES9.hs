@@ -1,4 +1,4 @@
-module AOC.ES9 (main) where
+module AOC.A20.ES9 (main) where
 
 -- isValid preamble -> array -> boolean
 import AOC.Utils

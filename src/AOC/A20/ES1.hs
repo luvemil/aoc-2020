@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module AOC.ES1 (main) where
+module AOC.A20.ES1 (main) where
 
 import AOC.Utils (getPairs, parseList)
 

@@ -1,4 +1,4 @@
-module AOC.ES3 (main) where
+module AOC.A20.ES3 (main) where
 
 -- Given the current position, returns the charac
 -- getNextPos :: Int -> [String] -> (Char, Int, [String])
