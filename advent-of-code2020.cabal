@@ -68,6 +68,7 @@ library
       AOC.A22.ES3
       AOC.A22.ES4
       AOC.A22.ES5
+      AOC.A22.ES6
       AOC.Main
       AOC.Utils
       AOC.Utils.Grid

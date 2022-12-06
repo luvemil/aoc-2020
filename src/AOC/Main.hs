@@ -42,6 +42,7 @@ import Lib.Exercise
 import qualified AOC.A22.ES3 as A22E3
 import qualified AOC.A22.ES4 as A22E4
 import qualified AOC.A22.ES5 as A22E5
+import qualified AOC.A22.ES6 as A22E6
 
 -- Potentially can be Exercise -> Sem r ()
 chooseAction :: Exercise -> IO ()
@@ -84,6 +85,7 @@ chooseAction (A22E2 fp) = A22E2.main fp
 chooseAction (A22E3 fp) = A22E3.main fp
 chooseAction (A22E4 fp) = A22E4.main fp
 chooseAction (A22E5 fp) = A22E5.main fp
+chooseAction (A22E6 fp) = A22E6.main fp
 chooseAction None = liftIO $ putStrLn "Nothing to do"
 
 runExercise :: AppEnv -> IO ()
