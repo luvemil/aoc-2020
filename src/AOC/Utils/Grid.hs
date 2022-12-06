@@ -2,7 +2,7 @@ module AOC.Utils.Grid where
 
 import AOC.Utils (joinWith, uniq, (!?))
 import Control.Lens
-import Data.Maybe (catMaybes, fromMaybe)
+import Data.Maybe (catMaybes, fromMaybe, fromJust)
 
 data Grid a = Grid Int Int [a]
     -- { width :: Int
@@ -188,6 +188,11 @@ flipV grid@(Grid _ h _) = grid & itraversed %@~ \(x, y) _ -> grid ^?! ix (x, h -
 
 flipH :: Grid a -> Grid a
 flipH grid@(Grid w _ _) = grid & itraversed %@~ \(x, y) _ -> grid ^?! ix (w - x - 1, y)
+
+transpose :: Grid a -> Grid a
+transpose grid = 
+    let xss = grid ^.. _rows 
+     in fromJust $ createGrid xss
 
 concatGridH :: forall a. Monoid a => Grid a -> Grid a -> Grid a
 concatGridH g1@(Grid w1 h1 _) g2@(Grid w2 h2 _) =

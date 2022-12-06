@@ -112,6 +112,13 @@ g5Els =
     , [4, 49, 6]
     ]
 
+g5Els' :: [[Integer]]
+g5Els' = 
+    [ [1, 4]
+    , [2, 49]
+    , [3, 6] 
+    ]
+
 -- g1 + shift 1 2 g2
 g6Els :: [[Integer]]
 g6Els =
@@ -137,6 +144,8 @@ spec =
             add g1 (shift 1 1 g2) `shouldBe` g5
         it "g1 + shift 1 2 g2" $
             add g1 (shift 1 2 g2) `shouldBe` g6
+        it "transposes basic grids" $
+            transpose g5 `shouldBe` g5'
         prop "add is commutative" $
             prop_commutativeAdd @(Sum Int)
         prop "add is associative" $
@@ -160,7 +169,7 @@ spec =
         prop "concatGridV" $
             prop_concatVShiftAdd @(Sum Int)
   where
-    [g1, g1Shifted, g2, g3, g4, g5, g6] =
+    [g1, g1Shifted, g2, g3, g4, g5, g5', g6] =
         map
             makeGrid
-            [g1Els, g1ShiftedEls, g2Els, g3Els, g4Els, g5Els, g6Els]
+            [g1Els, g1ShiftedEls, g2Els, g3Els, g4Els, g5Els, g5Els', g6Els]
