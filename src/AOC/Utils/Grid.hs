@@ -2,7 +2,7 @@ module AOC.Utils.Grid where
 
 import AOC.Utils (joinWith, uniq, (!?))
 import Control.Lens
-import Data.Maybe (catMaybes, fromMaybe, fromJust)
+import Data.Maybe (catMaybes, fromMaybe, fromJust, mapMaybe)
 
 data Grid a = Grid Int Int [a]
     -- { width :: Int
@@ -69,6 +69,17 @@ getRow x (Grid w h xs)
 
 _rows :: Fold (Grid a) [a]
 _rows = folding $ \x@(Grid _ h _) -> map (`getRow` x) [0 .. (h - 1)]
+
+getCol :: Int -> Grid a -> [a]
+getCol x g@(Grid w h _)
+    | x < 0 || x > w = []
+    | otherwise =
+        let res = [0 .. (h - 1)]
+                & mapMaybe (\y -> g ^? ix (x, y))
+         in res
+
+_cols :: Fold (Grid a) [a]
+_cols = folding $ \x@(Grid w _ _) -> map (`getCol` x) [0 .. (w - 1)]
 
 isIn :: (Int, Int) -> Grid a -> Bool
 (x, y) `isIn` (Grid w h _) = x >= 0 && y >= 0 && x < w && y < h
@@ -188,11 +199,6 @@ flipV grid@(Grid _ h _) = grid & itraversed %@~ \(x, y) _ -> grid ^?! ix (x, h -
 
 flipH :: Grid a -> Grid a
 flipH grid@(Grid w _ _) = grid & itraversed %@~ \(x, y) _ -> grid ^?! ix (w - x - 1, y)
-
-transpose :: Grid a -> Grid a
-transpose grid = 
-    let xss = grid ^.. _rows 
-     in fromJust $ createGrid xss
 
 concatGridH :: forall a. Monoid a => Grid a -> Grid a -> Grid a
 concatGridH g1@(Grid w1 h1 _) g2@(Grid w2 h2 _) =

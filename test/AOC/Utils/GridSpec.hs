@@ -144,8 +144,10 @@ spec =
             add g1 (shift 1 1 g2) `shouldBe` g5
         it "g1 + shift 1 2 g2" $
             add g1 (shift 1 2 g2) `shouldBe` g6
-        it "transposes basic grids" $
-            transpose g5 `shouldBe` g5'
+        it "cols gets the columns" $
+            head (toListOf _cols g6) `shouldBe` ([1, 4, 0] :: [Sum Integer])
+        it "the positions (x, y) is from top left" $
+            (g6 ^? ix (0, 2)) `shouldBe` Just (0 :: Sum Integer)
         prop "add is commutative" $
             prop_commutativeAdd @(Sum Int)
         prop "add is associative" $
