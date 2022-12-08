@@ -37,6 +37,7 @@ dependencies:
   - array
   - unordered-containers
   - hmatrix
+  - filepath
 
 ghc-options:
   - -Wall

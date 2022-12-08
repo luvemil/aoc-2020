@@ -69,6 +69,7 @@ library
       AOC.A22.ES4
       AOC.A22.ES5
       AOC.A22.ES6
+      AOC.A22.ES7
       AOC.Main
       AOC.Utils
       AOC.Utils.Grid
@@ -118,6 +119,7 @@ library
     , base >=4.7 && <5
     , bytestring
     , containers
+    , filepath
     , generic-lens
     , hmatrix
     , lens
@@ -170,6 +172,7 @@ executable advent-of-code2020-exe
     , base >=4.7 && <5
     , bytestring
     , containers
+    , filepath
     , generic-lens
     , hmatrix
     , lens
@@ -227,6 +230,7 @@ test-suite advent-of-code2020-test
     , base >=4.7 && <5
     , bytestring
     , containers
+    , filepath
     , generic-lens
     , hmatrix
     , hspec
