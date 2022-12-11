@@ -47,6 +47,7 @@ import qualified AOC.A22.ES7 as A22E7
 import qualified AOC.A22.ES8 as A22E8
 import qualified AOC.A22.ES9 as A22E9
 import qualified AOC.A22.ES10 as A22E10
+import qualified AOC.A22.ES11 as A22E11
 
 
 -- Potentially can be Exercise -> Sem r ()
@@ -95,6 +96,7 @@ chooseAction (A22E7 fp) = A22E7.main fp
 chooseAction (A22E8 fp) = A22E8.main fp
 chooseAction (A22E9 fp) = A22E9.main fp
 chooseAction (A22E10 fp) = A22E10.main fp
+chooseAction (A22E11 fp) = A22E11.main fp
 chooseAction None = liftIO $ putStrLn "Nothing to do"
 
 runExercise :: AppEnv -> IO ()
